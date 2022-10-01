@@ -1,7 +1,8 @@
 import { useContext } from "react";
 
-import "./ArtistTreeComponent.css";
-import { ArtistContext } from "./contexts/ArtistContext";
+import "./ArtistTree.css";
+
+import { ArtistContext } from "../contexts/ArtistContext";
 
 function ArtistTree(props) {
     let { toggleExpand, getRelatedArtists } = useContext(ArtistContext);

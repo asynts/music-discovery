@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 
-import ArtistTree from "./ArtistTreeComponent.js";
+import ArtistTree from "./ArtistTree.js";
 
-import { ArtistContext, ArtistProvider } from "./contexts/ArtistContext.js";
+import { ArtistContext, ArtistProvider } from "../contexts/ArtistContext.js";
 
 function Example(props) {
     let { rootArtist } = useContext(ArtistContext);
