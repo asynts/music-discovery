@@ -1,13 +1,24 @@
-import ArtistTree, { Artist } from "./ArtistTreeComponent.js";
+import React, { useContext } from "react";
 
-function App() {
-    let bob = new Artist("Bob", []);
-    let charlie = new Artist("Charlie", [])
-    let david = new Artist("David", [charlie]);
-    let alice = new Artist("Alice", [bob, david])
+import ArtistTree from "./ArtistTreeComponent.js";
+
+import { ArtistContext, ArtistProvider } from "./contexts/ArtistContext.js";
+
+function Example(props) {
+    let { rootArtist } = useContext(ArtistContext);
 
     return (
-        <ArtistTree artist={alice} />
+        <ArtistTree artist={rootArtist} />
+    );
+}
+
+function App(props) {
+    return (
+        <React.StrictMode>
+            <ArtistProvider>
+                <Example />
+            </ArtistProvider>
+        </React.StrictMode>
     );
 }
 

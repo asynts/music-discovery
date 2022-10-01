@@ -1,37 +1,38 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import "./ArtistTreeComponent.css";
-
-export class Artist {
-    constructor(name, children) {
-        this.name = name;
-        this.children = children;
-    }
-}
+import { ArtistContext } from "./contexts/ArtistContext";
 
 function ArtistTree(props) {
-    let [expanded, setExpanded] = useState(false);
+    let [expand, setExpand] = useState(false);
 
     function onClick(event) {
-        setExpanded(!expanded);
+        setExpand(!expand);
+    }
+
+    let { getRelatedArtists } = useContext(ArtistContext);
+
+    let relatedArtists = null;
+    if (expand) {
+        relatedArtists = getRelatedArtists(props.artist);
+    } else {
+        relatedArtists = [];
     }
 
     return (
         <div className="c-ArtistTree">
-            <div className="expand" onClick={onClick}>{expanded ? "-" : "+"}</div>
+            <div className="expand" onClick={onClick}>{expand ? "-" : "+"}</div>
             <div className="name">{props.artist.name}</div>
-            {expanded &&
-                <div className="children">
-                    {props.artist.children.map((childArtist, index) =>
-                        <div className="child" key={index}>
-                            <div className="arrow-container">
-                                <div className="arrow">&gt;</div>
-                            </div>
-                            <ArtistTree artist={childArtist} />
+            <div className="children">
+                {relatedArtists.map((relatedArtist, index) =>
+                    <div className="child" key={index}>
+                        <div className="arrow-container">
+                            <div className="arrow">&gt;</div>
                         </div>
-                    )}
-                </div>
-            }
+                        <ArtistTree artist={relatedArtist} />
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
