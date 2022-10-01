@@ -1,11 +1,17 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import "./ArtistTree.css";
 
 import { ArtistContext } from "../contexts/ArtistContext";
 
 function ArtistTree(props) {
-    let { toggleExpand, getRelatedArtists } = useContext(ArtistContext);
+    let { toggleExpand, getRelatedArtists, fetchRelatedArtistsAsync } = useContext(ArtistContext);
+
+    useEffect(() => {
+        if (props.artist.expand) {
+            fetchRelatedArtistsAsync(props.artist);
+        }
+    });
 
     let relatedArtists = null;
     if (props.artist.expand) {
