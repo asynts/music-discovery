@@ -1,26 +1,48 @@
 import { createContext, useReducer } from "react";
 
-export class Artist {
-    constructor(id, name, relatedArtistIds) {
-        this.id = id;
-        this.name = name;
-        this.relatedArtistIds = relatedArtistIds;
-    }
+function ASSERT_NOT_REACHED() {
+    throw new Error("ASSERT_NOT_REACHED");
 }
 
+/*
+Artist {
+    id: int
+    name: string
+    relatedArtistIds: list[int]
+}
+*/
+
 let initialValue = {
-    artists: new Map([
-        [1, new Artist(1, "Alice", [2, 4])],
-        [2, new Artist(2, "Bob", [])],
-        [3, new Artist(3, "Charlie", [])],
-        [4, new Artist(4, "David", [3])],
-    ]),
-    rootArtistId: 1,
+    artists: {
+        "1": { id: "1", name: "Alice", relatedArtistIds: ["2", "4"] },
+        "2": { id: "2", name: "Bob", relatedArtistIds: [] },
+        "3": { id: "3", name: "Charlie", relatedArtistIds: [] },
+        "4": { id: "4", name: "David", relatedArtistIds: ["3"] },
+    },
+    rootArtistId: "1",
+};
+
+let actions = {
+    SET_EXPAND: "SET_EXPAND",
 };
 
 function reducer(state, action) {
-    // FIXME
-    return state;
+    switch (action.type) {
+    case actions.SET_EXPAND:
+        return {
+            ...state,
+            artists: {
+                ...state.artists,
+                [action.payload.id]: {
+                    ...state.artists[action.payload.id],
+                    expand: action.payload.expand,
+                },
+            },
+        };
+
+    default:
+        ASSERT_NOT_REACHED();
+    }
 }
 
 export const ArtistContext = createContext();
@@ -30,11 +52,20 @@ export function ArtistProvider(props) {
 
     let value = {
         artists: state.artists,
-        rootArtist: state.artists.get(state.rootArtistId),
+        rootArtist: state.artists[state.rootArtistId],
 
         getRelatedArtists(artist) {
             return artist.relatedArtistIds
-                .map(id => state.artists.get(id));
+                .map(id => state.artists[id]);
+        },
+        toggleExpand(artist) {
+            dispatch({
+                type: actions.SET_EXPAND,
+                payload: {
+                    id: artist.id,
+                    expand: !artist.expand,
+                },
+            });
         },
     };
 

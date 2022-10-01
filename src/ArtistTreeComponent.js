@@ -1,19 +1,13 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 import "./ArtistTreeComponent.css";
 import { ArtistContext } from "./contexts/ArtistContext";
 
 function ArtistTree(props) {
-    let [expand, setExpand] = useState(false);
-
-    function onClick(event) {
-        setExpand(!expand);
-    }
-
-    let { getRelatedArtists } = useContext(ArtistContext);
+    let { toggleExpand, getRelatedArtists } = useContext(ArtistContext);
 
     let relatedArtists = null;
-    if (expand) {
+    if (props.artist.expand) {
         relatedArtists = getRelatedArtists(props.artist);
     } else {
         relatedArtists = [];
@@ -21,7 +15,7 @@ function ArtistTree(props) {
 
     return (
         <div className="c-ArtistTree">
-            <div className="expand" onClick={onClick}>{expand ? "-" : "+"}</div>
+            <div className="expand" onClick={() => toggleExpand(props.artist)}>{props.artist.expand ? "-" : "+"}</div>
             <div className="name">{props.artist.name}</div>
             <div className="children">
                 {relatedArtists.map((relatedArtist, index) =>
