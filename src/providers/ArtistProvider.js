@@ -10,6 +10,7 @@ function ASSERT_NOT_REACHED() {
 Artist {
     id: int
     name: string
+    expand: boolean
 
     relatedArtistIds: list[int]?
 }
@@ -17,7 +18,12 @@ Artist {
 
 let initialValue = {
     artists: {
-        "6XyY86QOPPrYVGvF9ch6wz": { id: "6XyY86QOPPrYVGvF9ch6wz", name: "Linkin Park", relatedArtistIds: null },
+        "6XyY86QOPPrYVGvF9ch6wz": {
+            id: "6XyY86QOPPrYVGvF9ch6wz",
+            name: "Linkin Park",
+            relatedArtistIds: null,
+            expand: false,
+        },
     },
     rootArtistId: "6XyY86QOPPrYVGvF9ch6wz",
 };
@@ -25,22 +31,24 @@ let initialValue = {
 let actions = {
     SET_EXPAND: "SET_EXPAND",
     SET_RELATED_ARTIST_IDS: "SET_RELATED_ARTIST_IDS",
-    ADD_ARTIST_IF_NOT_EXISTS: "ADD_ARTIST_IF_NOT_EXISTS",
+    LOAD_ARTISTS_IF_NOT_EXIST: "LOAD_ARTISTS_IF_NOT_EXIST",
 };
 
 function reducer(state, action) {
     switch (action.type) {
-    case actions.ADD_ARTIST_IF_NOT_EXISTS:
-        // Return early if artist already exists.
-        if (state.artists[action.payload.id] !== undefined) {
-            return state;
+    case actions.LOAD_ARTISTS_IF_NOT_EXIST:
+        let newArtists = {};
+        for (let newArtist of action.payload) {
+            newArtists[newArtist.id] = newArtist;
         }
 
         return {
             ...state,
             artists: {
+                // First take the new values, then override with existing values.
+                // Thus we keep all the related artist that have been loaded already.
+                ...newArtists,
                 ...state.artists,
-                [action.payload.id]: action.payload.value,
             },
         };
     case actions.SET_EXPAND:
@@ -88,15 +96,10 @@ export function ArtistProvider(props) {
 
             let relatedArtists = await server.fetchRelatedArtistsAsync(artist.id);
 
-            for (let relatedArtist of relatedArtists) {
-                dispatch({
-                    type: actions.ADD_ARTIST_IF_NOT_EXISTS,
-                    payload: {
-                        id: relatedArtist.id,
-                        value: relatedArtist,
-                    },
-                });
-            }
+            dispatch({
+                type: actions.LOAD_ARTISTS_IF_NOT_EXIST,
+                payload: relatedArtists,
+            });
 
             // This is safe, even if the request was made multiple times.
             dispatch({

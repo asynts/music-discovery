@@ -66,14 +66,9 @@ export function AuthEndpoint(props) {
             return;
         }
 
-        console.log(window.location.href);
-
         // Extract the access token from the URL fragment.
         // There are some technical reasons why this is being passed in the fragment and not in the query.
         let urlSearchParameters = new URLSearchParams(window.location.hash.substring(1));
-
-        console.log(urlSearchParameters.get("state"), urlSearchParameters.get("access_token"));
-        console.log(localStorage.getItem("spotify-oauth-state"))
 
         ASSERT(urlSearchParameters.get("state") === localStorage.getItem("spotify-oauth-state"));
         localStorage.setItem("spotify-oauth-token", urlSearchParameters.get("access_token"));

@@ -27,11 +27,10 @@ export async function fetchRelatedArtistsAsync(artist_id) {
 
     let json = await spotifyApiGET(`/artists/${artist_id}/related-artists`);
 
-    return json.artists.map(artist => {
-        return {
-            id: artist.id,
-            name: artist.name,
-            relatedArtistIds: null,
-        };
-    });
+    return json.artists.map(artist => ({
+        id: artist.id,
+        name: artist.name,
+        relatedArtistIds: null,
+        expand: false,
+    }));
 }
