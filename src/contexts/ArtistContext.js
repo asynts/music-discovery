@@ -75,6 +75,11 @@ export function ArtistProvider(props) {
         rootArtist: state.artists[state.rootArtistId],
 
         async fetchRelatedArtistsAsync({ artist, signal }) {
+            // The server could return different results, but we don't really care.
+            if (artist.relatedArtistIds !== null) {
+                return;
+            }
+
             let relatedArtistIds = await server.fetchRelatedArtistsIdsAsync({ artist, signal });
 
             if (!signal.aborted) {
