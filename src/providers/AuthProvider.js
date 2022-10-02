@@ -12,7 +12,7 @@ function ASSERT(condition) {
     }
 }
 
-function getSpotifyToken() {
+export function getSpotifyToken() {
     return localStorage.getItem("spotify-oauth-token");
 }
 
