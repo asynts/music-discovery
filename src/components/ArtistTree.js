@@ -8,8 +8,10 @@ function ArtistTree(props) {
     let { toggleExpand, getRelatedArtists, fetchRelatedArtistsAsync } = useContext(ArtistContext);
 
     useEffect(() => {
-        fetchRelatedArtistsAsync(props.artist);
-    }, [props.artist.id]);
+        if (props.artist.expand) {
+            fetchRelatedArtistsAsync(props.artist);
+        }
+    });
 
     let relatedArtists = null;
     if (props.artist.expand) {
