@@ -17,21 +17,32 @@ Artist {
 
 let initialValue = {
     artists: {
-        "1": { id: "1", name: "Alice", relatedArtistIds: null },
-        "2": { id: "2", name: "Bob", relatedArtistIds: null },
-        "3": { id: "3", name: "Charlie", relatedArtistIds: null },
-        "4": { id: "4", name: "David", relatedArtistIds: null },
+        "6XyY86QOPPrYVGvF9ch6wz": { id: "6XyY86QOPPrYVGvF9ch6wz", name: "Linkin Park", relatedArtistIds: null },
     },
-    rootArtistId: "1",
+    rootArtistId: "6XyY86QOPPrYVGvF9ch6wz",
 };
 
 let actions = {
     SET_EXPAND: "SET_EXPAND",
     SET_RELATED_ARTIST_IDS: "SET_RELATED_ARTIST_IDS",
+    ADD_ARTIST_IF_NOT_EXISTS: "ADD_ARTIST_IF_NOT_EXISTS",
 };
 
 function reducer(state, action) {
     switch (action.type) {
+    case actions.ADD_ARTIST_IF_NOT_EXISTS:
+        // Return early if artist already exists.
+        if (state.artists[action.payload.id] !== undefined) {
+            return state;
+        }
+
+        return {
+            ...state,
+            artists: {
+                ...state.artists,
+                [action.payload.id]: action.payload.value,
+            },
+        };
     case actions.SET_EXPAND:
         return {
             ...state,
@@ -69,19 +80,30 @@ export function ArtistProvider(props) {
         rootArtist: state.artists[state.rootArtistId],
 
         async fetchRelatedArtistsAsync(artist) {
+            // Return early if already loaded.
             // The server could return different results, but we don't really care.
             if (artist.relatedArtistIds !== null) {
                 return;
             }
 
-            let relatedArtistIds = await server.fetchRelatedArtistsIdsAsync(artist);
+            let relatedArtists = await server.fetchRelatedArtistsAsync(artist.id);
+
+            for (let relatedArtist of relatedArtists) {
+                dispatch({
+                    type: actions.ADD_ARTIST_IF_NOT_EXISTS,
+                    payload: {
+                        id: relatedArtist.id,
+                        value: relatedArtist,
+                    },
+                });
+            }
 
             // This is safe, even if the request was made multiple times.
             dispatch({
                 type: actions.SET_RELATED_ARTIST_IDS,
                 payload: {
                     id: artist.id,
-                    value: relatedArtistIds,
+                    value: relatedArtists.map(artist => artist.id),
                 },
             });
         },
