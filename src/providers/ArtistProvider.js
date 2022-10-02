@@ -96,6 +96,10 @@ export function ArtistProvider(props) {
 
             let relatedArtists = await server.fetchRelatedArtistsAsync(artist.id);
 
+            // Prevent infinite loop where artists are directly or indirectly related to themselves.
+            // We simply sort out artists that are already known to us.
+            relatedArtists = relatedArtists.filter(artist => !(artist.id in state.artists));
+
             dispatch({
                 type: actions.LOAD_ARTISTS_IF_NOT_EXIST,
                 payload: relatedArtists,
