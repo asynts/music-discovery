@@ -8,14 +8,7 @@ function ArtistTree(props) {
     let { toggleExpand, getRelatedArtists, fetchRelatedArtistsAsync } = useContext(ArtistContext);
 
     useEffect(() => {
-        let abortController = new AbortController();
-
-        fetchRelatedArtistsAsync({
-            artist: props.artist,
-            signal: abortController.signal,
-        });
-
-        return () => abortController.abort();
+        fetchRelatedArtistsAsync(props.artist);
     }, [props.artist.id]);
 
     let relatedArtists = null;

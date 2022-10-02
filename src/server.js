@@ -28,7 +28,7 @@ async function connectSpotifyAsync() {
 }
 // connectSpotifyAsync();
 
-export async function fetchRelatedArtistsIdsAsync({ artist, signal }) {
+export async function fetchRelatedArtistsIdsAsync(artist) {
     console.log(`fetchRelatedArtistsIdsAsync(${artist.id})`);
 
     let lookup = {

@@ -74,23 +74,22 @@ export function ArtistProvider(props) {
         artists: state.artists,
         rootArtist: state.artists[state.rootArtistId],
 
-        async fetchRelatedArtistsAsync({ artist, signal }) {
+        async fetchRelatedArtistsAsync(artist) {
             // The server could return different results, but we don't really care.
             if (artist.relatedArtistIds !== null) {
                 return;
             }
 
-            let relatedArtistIds = await server.fetchRelatedArtistsIdsAsync({ artist, signal });
+            let relatedArtistIds = await server.fetchRelatedArtistsIdsAsync(artist);
 
-            if (!signal.aborted) {
-                dispatch({
-                    type: actions.SET_RELATED_ARTIST_IDS,
-                    payload: {
-                        id: artist.id,
-                        value: relatedArtistIds,
-                    },
-                });
-            }
+            // This is safe, even if the request was made multiple times.
+            dispatch({
+                type: actions.SET_RELATED_ARTIST_IDS,
+                payload: {
+                    id: artist.id,
+                    value: relatedArtistIds,
+                },
+            });
         },
         getRelatedArtists(artist) {
             if (artist.relatedArtistIds === null) {
