@@ -2,12 +2,6 @@ import { createContext, useReducer } from "react";
 
 import * as server from "../server.js";
 
-function ASSERT(condition) {
-    if (!condition) {
-        throw new Error("ASSERT");
-    }
-}
-
 function ASSERT_NOT_REACHED() {
     throw new Error("ASSERT_NOT_REACHED");
 }

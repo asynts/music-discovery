@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 
 import "./ArtistTree.css";
 
-import { ArtistContext } from "../contexts/ArtistContext";
+import { ArtistContext } from "../providers/ArtistProvider.js";
 
 function ArtistTree(props) {
     let { toggleExpand, getRelatedArtists, fetchRelatedArtistsAsync } = useContext(ArtistContext);

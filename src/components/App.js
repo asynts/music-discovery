@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, } from "react";
+import { BrowserRouter, useRoutes } from "react-router-dom";
 
 import ArtistTree from "./ArtistTree.js";
 
-import { ArtistContext, ArtistProvider } from "../contexts/ArtistContext.js";
+import { ArtistContext, ArtistProvider } from "../providers/ArtistProvider.js";
+import { AuthProvider, AuthEndpoint } from "../providers/AuthProvider.js";
 
-function Example(props) {
+function Index(props) {
     let { rootArtist } = useContext(ArtistContext);
 
     return (
@@ -12,12 +14,39 @@ function Example(props) {
     );
 }
 
+function Providers(props) {
+    return (
+        <AuthProvider>
+            <ArtistProvider>
+                {props.children}
+            </ArtistProvider>
+        </AuthProvider>
+    );
+}
+
+function AppRoutes(props) {
+    return useRoutes([
+        {
+            path: "/auth_endpoint",
+            element: <AuthEndpoint />,
+        },
+        {
+            path: "/",
+            element: (
+                <Providers>
+                    <Index />
+                </Providers>
+            ),
+        },
+    ]);
+}
+
 function App(props) {
     return (
         <React.StrictMode>
-            <ArtistProvider>
-                <Example />
-            </ArtistProvider>
+            <BrowserRouter>
+                <AppRoutes />
+            </BrowserRouter>
         </React.StrictMode>
     );
 }
