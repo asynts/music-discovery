@@ -1,4 +1,4 @@
-export async function fetchRelatedArtistsIdsAsync(artist) {
+export async function fetchRelatedArtistsIdsAsync({ artist, signal }) {
     console.log(`fetchRelatedArtistsIdsAsync(${artist.id})`);
 
     let lookup = {
