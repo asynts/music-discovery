@@ -1,0 +1,10 @@
+body {
+    margin: 0;
+}
+
+.c-Index {
+    display: grid;
+    grid-template-columns: auto 20%;
+
+    height: 100%;
+}

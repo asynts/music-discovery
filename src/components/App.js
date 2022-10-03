@@ -2,15 +2,21 @@ import React, { useContext, } from "react";
 import { BrowserRouter, useRoutes } from "react-router-dom";
 
 import ArtistTree from "./ArtistTree.js";
+import ArtistDetails from "./ArtistDetails.js";
 
 import { ArtistContext, ArtistProvider } from "../providers/ArtistProvider.js";
 import { AuthProvider, AuthEndpoint } from "../providers/AuthProvider.js";
 
+import "./App.css";
+
 function Index(props) {
-    let { rootArtist } = useContext(ArtistContext);
+    let { rootArtist, selectedArtist } = useContext(ArtistContext);
 
     return (
-        <ArtistTree artist={rootArtist} />
+        <div className="c-Index">
+            <ArtistTree artist={rootArtist} />
+            <ArtistDetails artist={selectedArtist} />
+        </div>
     );
 }
 
