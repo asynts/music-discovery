@@ -7,15 +7,22 @@ function ASSERT_NOT_REACHED() {
 }
 
 /*
+ArtistId = string
+
 Artist {
-    id: int
+    id: ArtistId
     name: string
     expand: boolean
 
-    relatedArtistIds: list[int]?
+    relatedArtistIds: list[ArtistId]?
+}
+
+State {
+    artists: map[ArtistId, Artist]
+    rootArtistId: ArtistId
+    selectedArtistId: ArtistId?
 }
 */
-
 let initialValue = {
     artists: {
         "6XyY86QOPPrYVGvF9ch6wz": {
@@ -26,16 +33,23 @@ let initialValue = {
         },
     },
     rootArtistId: "6XyY86QOPPrYVGvF9ch6wz",
+    selectedArtistId: null,
 };
 
 let actions = {
     SET_EXPAND: "SET_EXPAND",
     SET_RELATED_ARTIST_IDS: "SET_RELATED_ARTIST_IDS",
+    SET_SELECTED_ARTIST_ID: "SET_SELECTED_ARTIST_ID",
     LOAD_ARTISTS_IF_NOT_EXIST: "LOAD_ARTISTS_IF_NOT_EXIST",
 };
 
 function reducer(state, action) {
     switch (action.type) {
+    case actions.SET_SELECTED_ARTIST_ID:
+        return {
+            ...state,
+            selectedArtistId: action.payload,
+        };
     case actions.LOAD_ARTISTS_IF_NOT_EXIST:
         let newArtists = {};
         for (let newArtist of action.payload) {
@@ -86,6 +100,7 @@ export function ArtistProvider(props) {
     let value = {
         artists: state.artists,
         rootArtist: state.artists[state.rootArtistId],
+        selectedArtist: state.artists[state.selectedArtistId] || null,
 
         async fetchRelatedArtistsAsync(artist) {
             // Return early if already loaded.
@@ -131,6 +146,12 @@ export function ArtistProvider(props) {
                     id: artist.id,
                     value: !artist.expand,
                 },
+            });
+        },
+        setSelectedArtist(artist) {
+            dispatch({
+                type: actions.SET_SELECTED_ARTIST_ID,
+                payload: artist.id,
             });
         },
     };
