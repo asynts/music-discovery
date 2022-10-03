@@ -4,7 +4,22 @@ body {
 
 .c-Index {
     display: grid;
-    grid-template-columns: auto 20%;
+    grid-template: 1fr auto / auto 20%;
 
     height: 100%;
+}
+
+.c-Index .c-ArtistTree {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.c-Index .c-ArtistDetails {
+    grid-column: 2;
+    grid-row: 1
+}
+
+.c-Index .c-Player {
+    grid-column: 1 / 3;
+    grid-row: 2;
 }

@@ -1,0 +1,7 @@
+.c-Player {
+    border-top: 2px solid grey;
+}
+
+.c-Player .audio {
+    width: 100%;
+}

@@ -23,6 +23,7 @@ TrackId = string
 Track {
     id: TrackId
     name: string
+    previewUrl: string
 }
 
 State {
