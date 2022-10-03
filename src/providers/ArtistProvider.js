@@ -15,12 +15,22 @@ Artist {
     expand: boolean
 
     relatedArtistIds: list[ArtistId]?
+    topTrackIds: list[TrackId]?
+}
+
+TrackId = string
+
+Track {
+    id: TrackId
+    name: string
 }
 
 State {
     artists: map[ArtistId, Artist]
     rootArtistId: ArtistId
     selectedArtistId: ArtistId?
+
+    tracks: map[TrackId, Track]
 }
 */
 let initialValue = {
@@ -29,11 +39,14 @@ let initialValue = {
             id: "6XyY86QOPPrYVGvF9ch6wz",
             name: "Linkin Park",
             relatedArtistIds: null,
+            topTrackIds: null,
             expand: false,
         },
     },
     rootArtistId: "6XyY86QOPPrYVGvF9ch6wz",
     selectedArtistId: null,
+
+    tracks: {},
 };
 
 let actions = {
@@ -41,10 +54,37 @@ let actions = {
     SET_RELATED_ARTIST_IDS: "SET_RELATED_ARTIST_IDS",
     SET_SELECTED_ARTIST_ID: "SET_SELECTED_ARTIST_ID",
     LOAD_ARTISTS_IF_NOT_EXIST: "LOAD_ARTISTS_IF_NOT_EXIST",
+    LOAD_TRACKS_IF_NOT_EXIST: "LOAD_TRACKS_IF_NOT_EXIST",
+    SET_TOP_TRACK_IDS: "SET_TOP_TRACK_IDS",
 };
 
 function reducer(state, action) {
     switch (action.type) {
+    case actions.LOAD_TRACKS_IF_NOT_EXIST:
+        let newTracks = {};
+        for (let track of action.payload) {
+            newTracks[track.id] = track;
+        }
+
+        return {
+            ...state,
+            tracks: {
+                // First take the new values, then override with existing values.
+                ...newTracks,
+                ...state.tracks,
+            }
+        };
+    case actions.SET_TOP_TRACK_IDS:
+        return {
+            ...state,
+            artists: {
+                ...state.artists,
+                [action.payload.id]: {
+                    ...state.artists[action.payload.id],
+                    topTrackIds: action.payload.value,
+                },
+            },
+        };
     case actions.SET_SELECTED_ARTIST_ID:
         return {
             ...state,
@@ -52,15 +92,14 @@ function reducer(state, action) {
         };
     case actions.LOAD_ARTISTS_IF_NOT_EXIST:
         let newArtists = {};
-        for (let newArtist of action.payload) {
-            newArtists[newArtist.id] = newArtist;
+        for (let artist of action.payload) {
+            newArtists[artist.id] = artist;
         }
 
         return {
             ...state,
             artists: {
                 // First take the new values, then override with existing values.
-                // Thus we keep all the related artist that have been loaded already.
                 ...newArtists,
                 ...state.artists,
             },
@@ -120,12 +159,33 @@ export function ArtistProvider(props) {
                 payload: relatedArtists,
             });
 
-            // This is safe, even if the request was made multiple times.
             dispatch({
                 type: actions.SET_RELATED_ARTIST_IDS,
                 payload: {
                     id: artist.id,
                     value: relatedArtists.map(artist => artist.id),
+                },
+            });
+        },
+        async fetchTopTracksForArtistAsync(artist) {
+            // Return early if already loaded.
+            // The server could return different results, but we don't really care.
+            if (artist.topTrackIds !== null) {
+                return;
+            }
+
+            let topTracks = await server.fetchTopTracksForArtist(artist.id);
+
+            dispatch({
+                type: actions.LOAD_TRACKS_IF_NOT_EXIST,
+                payload: topTracks,
+            });
+
+            dispatch({
+                type: actions.SET_TOP_TRACK_IDS,
+                payload: {
+                    id: artist.id,
+                    value: topTracks.map(track => track.id),
                 },
             });
         },
@@ -137,6 +197,16 @@ export function ArtistProvider(props) {
             } else {
                 return artist.relatedArtistIds
                     .map(id => state.artists[id]);
+            }
+        },
+        getTopTracksForArtist(artist) {
+            if (artist.topTrackIds === null) {
+                // Related tracks are lazily loaded.
+                // The caller should trigger 'fetchTopTracksForArtistAsync' in 'useEffect'.
+                return [];
+            } else {
+                return artist.topTrackIds
+                    .map(id => state.tracks[id]);
             }
         },
         toggleExpand(artist) {

@@ -30,7 +30,19 @@ export async function fetchRelatedArtistsAsync(artist_id) {
     return json.artists.map(artist => ({
         id: artist.id,
         name: artist.name,
-        relatedArtistIds: null,
         expand: false,
+        relatedArtistIds: null,
+        topTrackIds: null,
+    }));
+}
+
+export async function fetchTopTracksForArtist(artist_id) {
+    console.log(`fetchTopTracksForArtist(${artist_id})`);
+
+    let json = await spotifyApiGET(`/artists/${artist_id}/top-tracks?market=DE`);
+
+    return json.tracks.map(track => ({
+        id: track.id,
+        name: track.name,
     }));
 }

@@ -40,8 +40,8 @@ function ArtistTree(props) {
             <div className="expand" onClick={() => toggleExpand(props.artist)}>{props.artist.expand ? "-" : "+"}</div>
             <div onClick={onClick} className={isSelectedArtist ? "name selected" : "name"}>{props.artist.name}</div>
             <div className="children">
-                {relatedArtists.map((relatedArtist, index) =>
-                    <div className="child" key={index}>
+                {relatedArtists.map(relatedArtist =>
+                    <div className="child" key={relatedArtist.id}>
                         <div className="arrow-container">
                             <div className="arrow">&gt;</div>
                         </div>
