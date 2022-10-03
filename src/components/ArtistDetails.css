@@ -12,3 +12,12 @@
     font-weight: bold;
     font-size: 16pt;
 }
+
+.c-ArtistDetails .tracks .track {
+    cursor: pointer;
+}
+
+.c-ArtistDetails .tracks .track.selected {
+    font-weight: bold;
+    text-decoration: underline;
+}

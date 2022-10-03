@@ -31,6 +31,7 @@ State {
     selectedArtistId: ArtistId?
 
     tracks: map[TrackId, Track]
+    selectedTrackId: TrackId?
 }
 */
 let initialValue = {
@@ -47,6 +48,7 @@ let initialValue = {
     selectedArtistId: null,
 
     tracks: {},
+    selectedTrackId: null,
 };
 
 let actions = {
@@ -56,10 +58,16 @@ let actions = {
     LOAD_ARTISTS_IF_NOT_EXIST: "LOAD_ARTISTS_IF_NOT_EXIST",
     LOAD_TRACKS_IF_NOT_EXIST: "LOAD_TRACKS_IF_NOT_EXIST",
     SET_TOP_TRACK_IDS: "SET_TOP_TRACK_IDS",
+    SET_SELECTED_TRACK_ID: "SET_SELECTED_TRACK_ID",
 };
 
 function reducer(state, action) {
     switch (action.type) {
+    case actions.SET_SELECTED_TRACK_ID:
+        return {
+            ...state,
+            selectedTrackId: action.payload,
+        };
     case actions.LOAD_TRACKS_IF_NOT_EXIST:
         let newTracks = {};
         for (let track of action.payload) {
@@ -140,6 +148,7 @@ export function ArtistProvider(props) {
         artists: state.artists,
         rootArtist: state.artists[state.rootArtistId],
         selectedArtist: state.artists[state.selectedArtistId] || null,
+        selectedTrack: state.tracks[state.selectedTrackId] || null,
 
         async fetchRelatedArtistsAsync(artist) {
             // Return early if already loaded.
@@ -222,6 +231,12 @@ export function ArtistProvider(props) {
             dispatch({
                 type: actions.SET_SELECTED_ARTIST_ID,
                 payload: artist.id,
+            });
+        },
+        setSelectedTrack(track) {
+            dispatch({
+                type: actions.SET_SELECTED_TRACK_ID,
+                payload: track.id,
             });
         },
     };

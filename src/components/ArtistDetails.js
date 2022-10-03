@@ -8,6 +8,8 @@ function ArtistDetails(props) {
     let {
         fetchTopTracksForArtistAsync,
         getTopTracksForArtist,
+        selectedTrack,
+        setSelectedTrack,
     } = useContext(ArtistContext)
 
     useEffect(() => {
@@ -29,11 +31,18 @@ function ArtistDetails(props) {
                 {props.artist === null ? "No artist selected." : props.artist.name}
             </div>
             <ol className="tracks">
-                {topTracks.map(track =>
-                    <li className="track" key={track.id}>
-                        {track.name}
-                    </li>
-                )}
+                {topTracks.map(track => {
+                    function onClick_track(event) {
+                        setSelectedTrack(track);
+                    }
+
+                    let isSelectedTrack = selectedTrack?.id === track.id;
+                    return (
+                        <li onClick={onClick_track} className={isSelectedTrack ? "track selected" : "track"} key={track.id}>
+                            {track.name}
+                        </li>
+                    );
+                })}
             </ol>
         </div>
     );
