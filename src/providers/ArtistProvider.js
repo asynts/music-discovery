@@ -16,6 +16,8 @@ Artist {
 
     relatedArtistIds: list[ArtistId]?
     topTrackIds: list[TrackId]?
+
+    playerPlaying: boolean
 }
 
 TrackId = string
@@ -50,6 +52,8 @@ let initialValue = {
 
     tracks: {},
     selectedTrackId: null,
+
+    playerPlaying: false,
 };
 
 let actions = {
@@ -60,6 +64,7 @@ let actions = {
     LOAD_TRACKS_IF_NOT_EXIST: "LOAD_TRACKS_IF_NOT_EXIST",
     SET_TOP_TRACK_IDS: "SET_TOP_TRACK_IDS",
     SET_SELECTED_TRACK_ID: "SET_SELECTED_TRACK_ID",
+    SET_PLAYER_PLAYING: "SET_PLAYER_PLAYING",
 };
 
 function reducer(state, action) {
@@ -68,6 +73,11 @@ function reducer(state, action) {
         return {
             ...state,
             selectedTrackId: action.payload,
+        };
+    case actions.SET_PLAYER_PLAYING:
+        return {
+            ...state,
+            playerPlaying: action.payload,
         };
     case actions.LOAD_TRACKS_IF_NOT_EXIST:
         let newTracks = {};
@@ -150,6 +160,7 @@ export function ArtistProvider(props) {
         rootArtist: state.artists[state.rootArtistId],
         selectedArtist: state.artists[state.selectedArtistId] || null,
         selectedTrack: state.tracks[state.selectedTrackId] || null,
+        playerPlaying: state.playerPlaying,
 
         async fetchRelatedArtistsAsync(artist) {
             // Return early if already loaded.
@@ -235,9 +246,17 @@ export function ArtistProvider(props) {
             });
         },
         setSelectedTrack(track) {
+            // Unfortunately, we can not do this in a single action because the library is broken.
             dispatch({
                 type: actions.SET_SELECTED_TRACK_ID,
                 payload: track.id,
+            });
+            this.setPlayerPlaying(true);
+        },
+        setPlayerPlaying(playing) {
+            dispatch({
+                type: actions.SET_PLAYER_PLAYING,
+                payload: playing,
             });
         },
     };
@@ -245,6 +264,7 @@ export function ArtistProvider(props) {
     value.fetchRelatedArtistsAsync = value.fetchRelatedArtistsAsync.bind(value);
     value.getRelatedArtists = value.getRelatedArtists.bind(value);
     value.toggleExpand = value.toggleExpand.bind(value);
+    value.setSelectedTrack = value.setSelectedTrack.bind(value);
 
     return (
         <ArtistContext.Provider value={value}>
