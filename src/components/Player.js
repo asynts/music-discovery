@@ -21,9 +21,10 @@ function Player(props) {
             <SpotifyPlayer
                 name="Discover Music!"
                 token={getSpotifyToken()}
-                uris={selectedTrack === null ? [] : [selectedTrack.spotifyUri]}
+                uris={selectedTrack?.spotifyUri}
                 play={playerPlaying}
-                callback={callback} />
+                callback={callback}
+                showSaveIcon={true} />
         </div>
     );
 }

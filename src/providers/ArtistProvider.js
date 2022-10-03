@@ -246,12 +246,18 @@ export function ArtistProvider(props) {
             });
         },
         setSelectedTrack(track) {
-            // Unfortunately, we can not do this in a single action because the library is broken.
+            this.setPlayerPlaying(false);
+
             dispatch({
                 type: actions.SET_SELECTED_TRACK_ID,
                 payload: track.id,
             });
-            this.setPlayerPlaying(true);
+
+            // Unfortunately, if the player is paused, it won't detect if the URI is changed.
+            // That isn't a bug in my code, this should workaround the issue.
+            setTimeout(() => {
+                this.setPlayerPlaying(true);
+            }, 0);
         },
         setPlayerPlaying(playing) {
             dispatch({

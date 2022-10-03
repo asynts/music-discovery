@@ -9,9 +9,11 @@ body {
     height: 100%;
 }
 
-.c-Index .c-ArtistTree {
+.c-Index .artist-tree-container {
     grid-column: 1;
     grid-row: 1;
+
+    overflow-y: scroll;
 }
 
 .c-Index .c-ArtistDetails {

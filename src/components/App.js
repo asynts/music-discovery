@@ -15,7 +15,9 @@ function Index(props) {
 
     return (
         <div className="c-Index">
-            <ArtistTree artist={rootArtist} />
+            <div className="artist-tree-container">
+                <ArtistTree artist={rootArtist} />
+            </div>
             <ArtistDetails artist={selectedArtist} />
             <Player track={selectedTrack} />
         </div>
