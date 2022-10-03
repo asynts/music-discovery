@@ -23,7 +23,7 @@ TrackId = string
 Track {
     id: TrackId
     name: string
-    previewUrl: string
+    spotifyUri: string?
 }
 
 State {

@@ -44,6 +44,6 @@ export async function fetchTopTracksForArtist(artist_id) {
     return json.tracks.map(track => ({
         id: track.id,
         name: track.name,
-        previewUrl: track.preview_url,
+        spotifyUri: track.uri,
     }));
 }

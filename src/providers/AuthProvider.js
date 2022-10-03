@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as oauth from "@panva/oauth4webapi";
 
 let SPOTIFY_CLIENT_ID = "e65e5a2379654a8782ac21646029ca66";
-let SPOTIFY_SCOPE = "";
+let SPOTIFY_SCOPE = "streaming user-read-email user-read-private user-read-playback-state";
 let SPOTIFY_REDIRECT_URL = "http://localhost:3000/auth_endpoint";
 
 function ASSERT(condition) {
