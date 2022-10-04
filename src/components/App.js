@@ -1,14 +1,10 @@
-import React, { useContext, } from "react";
+import React from "react";
 import { BrowserRouter, useRoutes } from "react-router-dom";
 
-import ArtistTree from "./ArtistTree.js";
-import ArtistDetails from "./ArtistDetails.js";
-import Player from "./Player.js";
-
 import { IndexPage } from "./IndexPage.js";
-import { NorthStar } from "./NorthStar.js";
+import { DiscoverPage } from "./DiscoverPage.js";
 
-import { ArtistContext, ArtistProvider } from "../providers/ArtistProvider.js";
+import { ArtistProvider } from "../providers/ArtistProvider.js";
 import { AuthProvider, AuthEndpoint } from "../providers/AuthProvider.js";
 
 import "./App.css";
@@ -23,22 +19,6 @@ function Providers(props) {
     );
 }
 
-// Route: /discover/:rootArtistId
-function DiscoverPage(props) {
-    // FIXME: useParams
-
-    let { rootArtist, selectedArtist, selectedTrack } = useContext(ArtistContext);
-
-    return (
-        <div className="c-DiscoverPage">
-            <NorthStar />
-            <ArtistTree artist={rootArtist} />
-            <ArtistDetails artist={selectedArtist} />
-            <Player track={selectedTrack} />
-        </div>
-    );
-}
-
 function AppRoutes(props) {
     return useRoutes([
         {
@@ -50,7 +30,7 @@ function AppRoutes(props) {
             element: <AuthEndpoint />,
         },
         {
-            path: "/discover/:rootArtistId",
+            path: "/discover/:paramRootArtistId",
             element: (
                 <Providers>
                     <DiscoverPage />

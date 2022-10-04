@@ -19,6 +19,9 @@ export async function fetchArtistAsync(artist_id) {
     return {
         id: json.id,
         name: json.name,
+        expand: false,
+        relatedArtistIds: null,
+        topTrackIds: null,
     };
 }
 

@@ -28,7 +28,7 @@ Track {
 
 State {
     artists: map[ArtistId, Artist]
-    rootArtistId: ArtistId
+    rootArtistId: ArtistId?
     selectedArtistId: ArtistId?
 
     tracks: map[TrackId, Track]
@@ -36,16 +36,8 @@ State {
 }
 */
 let initialValue = {
-    artists: {
-        "6XyY86QOPPrYVGvF9ch6wz": {
-            id: "6XyY86QOPPrYVGvF9ch6wz",
-            name: "Linkin Park",
-            relatedArtistIds: null,
-            topTrackIds: null,
-            expand: false,
-        },
-    },
-    rootArtistId: "6XyY86QOPPrYVGvF9ch6wz",
+    artists: {},
+    rootArtistId: null,
     selectedArtistId: null,
 
     tracks: {},
@@ -60,10 +52,16 @@ let actions = {
     LOAD_TRACKS_IF_NOT_EXIST: "LOAD_TRACKS_IF_NOT_EXIST",
     SET_TOP_TRACK_IDS: "SET_TOP_TRACK_IDS",
     SET_SELECTED_TRACK_ID: "SET_SELECTED_TRACK_ID",
+    SET_ROOT_ARTIST_ID: "SET_ROOT_ARTIST_ID",
 };
 
 function reducer(state, action) {
     switch (action.type) {
+    case actions.SET_ROOT_ARTIST_ID:
+        return {
+            ...state,
+            rootArtistId: action.payload,
+        };
     case actions.SET_SELECTED_TRACK_ID:
         return {
             ...state,
@@ -142,14 +140,37 @@ function reducer(state, action) {
 
 export const ArtistContext = createContext();
 
+async function fetchArtistAsync({ dispatch, artistId }) {
+    let artist = await server.fetchArtistAsync(artistId);
+
+    dispatch({
+        type: actions.LOAD_ARTISTS_IF_NOT_EXIST,
+        payload: [
+            artist,
+        ],
+    });
+}
+
+async function setRootArtistAsync({ dispatch, rootArtistId }) {
+    await fetchArtistAsync({ dispatch, artistId: rootArtistId });
+
+    dispatch({
+        type: actions.SET_ROOT_ARTIST_ID,
+        payload: rootArtistId,
+    });
+}
+
 export function ArtistProvider(props) {
     let [state, dispatch] = useReducer(reducer, initialValue);
 
     let value = {
         artists: state.artists,
-        rootArtist: state.artists[state.rootArtistId],
+        rootArtist: state.artists[state.rootArtistId] || null,
         selectedArtist: state.artists[state.selectedArtistId] || null,
         selectedTrack: state.tracks[state.selectedTrackId] || null,
+
+        fetchArtistAsync: artistId => fetchArtistAsync({ dispatch, artistId }),
+        setRootArtistAsync: rootArtistId => setRootArtistAsync({ dispatch, rootArtistId }),
 
         async fetchRelatedArtistsAsync(artist) {
             // Return early if already loaded.

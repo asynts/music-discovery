@@ -67,5 +67,6 @@
 }
 
 .c-ArtistTree .children .child .c-ArtistTree {
+    grid-row: 1;
     grid-column: 2;
 }
