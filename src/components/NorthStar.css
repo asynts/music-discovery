@@ -1,0 +1,8 @@
+.c-NorthStar {
+    font-size: 20pt;
+
+    border-bottom: 2px solid gray;
+    padding: 10pt;
+
+    cursor: pointer;
+}

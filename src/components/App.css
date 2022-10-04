@@ -4,22 +4,27 @@ body {
 
 .c-DiscoverPage {
     display: grid;
-    grid-template: 1fr auto / auto 20%;
+    grid-template: auto 1fr auto / auto 20%;
 
     height: 100%;
 }
 
+.c-DiscoverPage .c-NorthStar {
+    grid-column: 1 / 3;
+    grid-row: 1;
+}
+
 .c-DiscoverPage .c-ArtistTree {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 2;
 }
 
 .c-DiscoverPage .c-ArtistDetails {
     grid-column: 2;
-    grid-row: 1
+    grid-row: 2;
 }
 
 .c-DiscoverPage .c-Player {
     grid-column: 1 / 3;
-    grid-row: 2;
+    grid-row: 3;
 }

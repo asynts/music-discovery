@@ -6,6 +6,7 @@ import ArtistDetails from "./ArtistDetails.js";
 import Player from "./Player.js";
 
 import { IndexPage } from "./IndexPage.js";
+import { NorthStar } from "./NorthStar.js";
 
 import { ArtistContext, ArtistProvider } from "../providers/ArtistProvider.js";
 import { AuthProvider, AuthEndpoint } from "../providers/AuthProvider.js";
@@ -30,6 +31,7 @@ function DiscoverPage(props) {
 
     return (
         <div className="c-DiscoverPage">
+            <NorthStar />
             <ArtistTree artist={rootArtist} />
             <ArtistDetails artist={selectedArtist} />
             <Player track={selectedTrack} />

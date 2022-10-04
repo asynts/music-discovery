@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { NorthStar } from "./NorthStar.js";
+
 import { getSpotifyToken, redirectToSpotifyAuthentication } from "../auth.js";
 
 import "./IndexPage.css";
@@ -52,6 +54,7 @@ function AuthForm(props) {
 export function IndexPage(props) {
     return (
         <div className="c-IndexPage">
+            <NorthStar />
             {getSpotifyToken() ? <RootArtistForm /> : <AuthForm />}
         </div>
     );
