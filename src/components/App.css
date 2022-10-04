@@ -2,24 +2,24 @@ body {
     margin: 0;
 }
 
-.c-Index {
+.c-DiscoverPage {
     display: grid;
     grid-template: 1fr auto / auto 20%;
 
     height: 100%;
 }
 
-.c-Index .c-ArtistTree {
+.c-DiscoverPage .c-ArtistTree {
     grid-column: 1;
     grid-row: 1;
 }
 
-.c-Index .c-ArtistDetails {
+.c-DiscoverPage .c-ArtistDetails {
     grid-column: 2;
     grid-row: 1
 }
 
-.c-Index .c-Player {
+.c-DiscoverPage .c-Player {
     grid-column: 1 / 3;
     grid-row: 2;
 }
