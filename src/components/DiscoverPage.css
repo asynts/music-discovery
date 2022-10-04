@@ -13,6 +13,8 @@
 .c-DiscoverPage .artist-tree-container {
     grid-column: 1;
     grid-row: 2;
+
+    overflow-y: scroll;
 }
 
 .c-DiscoverPage .c-ArtistDetails {
