@@ -1,14 +1,23 @@
-import { getSpotifyToken } from "./providers/AuthProvider.js"
+import { parseFromLocalStorage } from "./auth.js";
 
 async function spotifyApiGET(path) {
+    let { accessToken } = parseFromLocalStorage();
+
     let response = await fetch(`https://api.spotify.com/v1${path}`, {
         method: "GET",
         headers: new Headers({
-            "Authorization": `Bearer ${getSpotifyToken()}`,
+            "Authorization": `Bearer ${accessToken}`,
         }),
     });
 
-    return await response.json();
+    let json = response.json();
+
+    if (!response.ok) {
+        // FIXME: Detect if token expired and refresh.
+        console.log("error returned by spotify:", json);
+    }
+
+    return json;
 }
 
 export async function fetchArtistAsync(artist_id) {

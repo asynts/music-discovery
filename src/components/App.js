@@ -3,21 +3,12 @@ import { BrowserRouter, useRoutes } from "react-router-dom";
 
 import { IndexPage } from "./IndexPage.js";
 import { DiscoverPage } from "./DiscoverPage.js";
+import { AuthPage } from "./AuthPage.js";
 
 import { ArtistProvider } from "../providers/ArtistProvider.js";
-import { AuthProvider, AuthEndpoint } from "../providers/AuthProvider.js";
+import { AuthProvider } from "../providers/AuthProvider.js";
 
 import "./App.css";
-
-function Providers(props) {
-    return (
-        <AuthProvider>
-            <ArtistProvider>
-                {props.children}
-            </ArtistProvider>
-        </AuthProvider>
-    );
-}
 
 function AppRoutes(props) {
     return useRoutes([
@@ -27,14 +18,17 @@ function AppRoutes(props) {
         },
         {
             path: "/auth_endpoint",
-            element: <AuthEndpoint />,
+            element: <AuthPage />,
         },
         {
             path: "/discover/:paramRootArtistId",
             element: (
-                <Providers>
-                    <DiscoverPage />
-                </Providers>
+                // FIXME: Is this in the correct order?
+                <AuthProvider>
+                    <ArtistProvider>
+                        <DiscoverPage />
+                    </ArtistProvider>
+                </AuthProvider>
             ),
         },
     ]);

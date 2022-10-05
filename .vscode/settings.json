@@ -3,4 +3,9 @@
     "editor.detectIndentation": false,
     "files.insertFinalNewline": true,
     "files.trimTrailingWhitespace": true,
+
+    "files.exclude": {
+        "**/.git/": true,
+        "**/node_modules/": true,
+    }
 }
