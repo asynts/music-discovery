@@ -2,22 +2,30 @@ import { useNavigate, useResolvedPath } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { handleCodeResponseAsync } from "../auth";
 
+export function useRedirectUri() {
+    // FIXME: Does this code work?
+    let redirectUri = new URL(window.location.href);
+    redirectUri.search = "";
+    redirectUri.pathname = useResolvedPath("/auth_endpoint").pathname;
+
+    return redirectUri;
+}
+
 // Route: /auth_endpoint
 export function AuthPage(props) {
     let navigate = useNavigate();
-    let resolvePath = useResolvedPath();
 
     let [error, setError] = useState(null);
 
+    let redirectUri = useRedirectUri();
+
     useEffect(() => {
-        // Extract the access token from the URL fragment.
-        // There are some technical reasons why this is being passed in the fragment and not in the query.
-        let urlSearchParameters = new URLSearchParams(window.location.hash.substring(1));
+        let urlSearchParameters = new URLSearchParams(window.location.search.substring(1));
 
         handleCodeResponseAsync({
             code: urlSearchParameters.get("code"),
             state: urlSearchParameters.get("state"),
-            redirectUri: resolvePath("/auth_endpoint"),
+            redirectUri,
         })
             .then(success => {
                 if (success) {

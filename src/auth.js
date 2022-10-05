@@ -1,11 +1,18 @@
 import * as oauth from "@panva/oauth4webapi";
 
+import { fromByteArray as byteArrayToBase64 } from "base64-js";
+
 let SPOTIFY_SCOPE = "";
 
+function stringToBase64(string) {
+    let byteArray = new TextEncoder().encode(string);
+    return byteArrayToBase64(byteArray);
+}
+
 export function parseFromLocalStorage() {
-    let clientId =localStorage.getItem("spotify-oauth-client-id");
+    let clientId = localStorage.getItem("spotify-oauth-client-id");
     let clientSecret = localStorage.getItem("spotify-oauth-client-secret");
-    let clientBasicAuthorization = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+    let clientBasicAuthorization = stringToBase64(`${clientId}:${clientSecret}`);
 
     return {
         clientId,
@@ -20,10 +27,15 @@ export function parseFromLocalStorage() {
     };
 }
 
+export function isAuthenticated() {
+    let { accessToken } = parseFromLocalStorage();
+    return accessToken !== null;
+}
+
 // This will redirect the user to Spotify.
 // The user is asked to confirm that they want to give us access.
 // Once confirmed they are redirected to the redirect URI which is handled by 'handleCodeResponseAsync'.
-export function redirectToSpotifyAuthentication({ clientId, clientSecret, redirectUri }) {
+export async function redirectToSpotifyAuthenticationAsync({ clientId, clientSecret, redirectUri }) {
     localStorage.setItem("spotify-oauth-client-id", clientId);
     localStorage.setItem("spotify-oauth-client-secret", clientSecret);
 
@@ -34,9 +46,9 @@ export function redirectToSpotifyAuthentication({ clientId, clientSecret, redire
 
     let codeVerifier = oauth.generateRandomCodeVerifier();
     localStorage.setItem("spotify-oauth-code-verifier", codeVerifier);
-    let codeChallenge = oauth.calculatePKCECodeChallenge(codeVerifier);
+    let codeChallenge = await oauth.calculatePKCECodeChallenge(codeVerifier);
 
-    let authorizationUrl = new URL("https://accounts.spotify.com/api/token");
+    let authorizationUrl = new URL("https://accounts.spotify.com/authorize");
     authorizationUrl.searchParams.set("client_id", clientId);
     authorizationUrl.searchParams.set("response_type", "code");
     authorizationUrl.searchParams.set("redirect_uri", redirectUri);
@@ -104,7 +116,6 @@ export async function refreshAccessTokenAsync() {
     let response = fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         body: formData,
-        credentials: "include",
         headers: new Headers({
             "Authorization": `Basic ${clientBasicAuthorization}`,
             "Content-Type": "application/x-www-form-urlencoded",

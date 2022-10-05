@@ -1,9 +1,10 @@
 import { useId, useState } from "react";
-import { useNavigate, useResolvedPath } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { NorthStar } from "./NorthStar.js";
+import { useRedirectUri } from "./AuthPage.js";
 
-import { getSpotifyToken, redirectToSpotifyAuthentication } from "../auth.js";
+import { isAuthenticated, parseFromLocalStorage, redirectToSpotifyAuthenticationAsync } from "../auth.js";
 
 import "./IndexPage.css";
 
@@ -36,17 +37,19 @@ function RootArtistForm(props) {
 }
 
 function AuthForm(props) {
-    let resolvePath = useResolvedPath();
-
     let clientId_htmlId = useId();
     let clientSecret_htmlId = useId();
 
-    let [clientId, setClientId] = useState("");
-    let [clientSecret, setClientSecret] = useState("");
+    let { clientId: initialClientId, clientSecret: initialClientSecret } = parseFromLocalStorage();
+
+    let [clientId, setClientId] = useState(initialClientId === null ? "" : initialClientId);
+    let [clientSecret, setClientSecret] = useState(initialClientSecret === null ? "" : initialClientSecret);
+
+    let redirectUri = useRedirectUri();
 
     function onClick(event) {
-        redirectToSpotifyAuthentication({
-            redirectUri: resolvePath("/auth_endpoint"),
+        redirectToSpotifyAuthenticationAsync({
+            redirectUri,
             clientId,
             clientSecret,
         });
@@ -58,11 +61,13 @@ function AuthForm(props) {
                 You need to authorize this application to use Spotify on your behalf.
             </div>
             <div>
-                <label for={clientId_htmlId}>Client Id:</label>
+                <label htmlFor={clientId_htmlId}>Client Id:</label>
                 <input id={clientId_htmlId} value={clientId} onChange={event => setClientId(event.target.value)} />
+                <br />
 
-                <label for={clientSecret_htmlId}>Client Secret:</label>
-                <input id={clientSecret_htmlId} value={clientSecret} onChange={event => setClientSecret(event.target.value)} />
+                <label htmlFor={clientSecret_htmlId}>Client Secret:</label>
+                <input id={clientSecret_htmlId} value={clientSecret} onChange={event => setClientSecret(event.target.value)} type="password" />
+                <br />
             </div>
             <button onClick={onClick}>Login with Spotify</button>
         </div>
@@ -74,7 +79,7 @@ export function IndexPage(props) {
     return (
         <div className="c-IndexPage">
             <NorthStar />
-            {getSpotifyToken() ? <RootArtistForm /> : <AuthForm />}
+            {isAuthenticated() ? <RootArtistForm /> : <AuthForm />}
         </div>
     );
 }
