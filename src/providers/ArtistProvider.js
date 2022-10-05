@@ -1,10 +1,7 @@
 import { createContext, useReducer } from "react";
 
 import * as server from "../server.js";
-
-function ASSERT_NOT_REACHED() {
-    throw new Error("ASSERT_NOT_REACHED");
-}
+import { ASSERT_NOT_REACHED } from "../util.js";
 
 /*
 ArtistId = string

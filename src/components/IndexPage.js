@@ -2,9 +2,9 @@ import { useId, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { NorthStar } from "./NorthStar.js";
-import { useRedirectUri } from "./AuthPage.js";
 
 import { isAuthenticated, parseFromLocalStorage, redirectToSpotifyAuthenticationAsync } from "../auth.js";
+import { useRedirectUri } from "../util.js";
 
 import "./IndexPage.css";
 

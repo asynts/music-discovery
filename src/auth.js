@@ -1,13 +1,8 @@
 import * as oauth from "@panva/oauth4webapi";
 
-import { fromByteArray as byteArrayToBase64 } from "base64-js";
+import { stringToBase64 } from "./util.js";
 
 let SPOTIFY_SCOPE = "";
-
-function stringToBase64(string) {
-    let byteArray = new TextEncoder().encode(string);
-    return byteArrayToBase64(byteArray);
-}
 
 export function parseFromLocalStorage() {
     let clientId = localStorage.getItem("spotify-oauth-client-id");

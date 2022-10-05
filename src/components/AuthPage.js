@@ -1,15 +1,8 @@
-import { useNavigate, useResolvedPath } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { handleCodeResponseAsync } from "../auth";
 
-export function useRedirectUri() {
-    // FIXME: Does this code work?
-    let redirectUri = new URL(window.location.href);
-    redirectUri.search = "";
-    redirectUri.pathname = useResolvedPath("/auth_endpoint").pathname;
-
-    return redirectUri;
-}
+import { handleCodeResponseAsync } from "../auth.js";
+import { useRedirectUri } from "../util.js";
 
 // Route: /auth_endpoint
 export function AuthPage(props) {
