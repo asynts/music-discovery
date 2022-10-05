@@ -75,17 +75,17 @@ export async function handleCodeResponseAsync({ code, state, redirectUri }) {
         return false;
     }
 
-    let formData = new FormData();
+    // If we use 'FormData' that will set the content type to multi-part which Spotify won't accept.
+    let formData = new URLSearchParams();
     formData.append("grant_type", "authorization_code");
     formData.append("code", code);
-    formData.append("redirect_uri", redirectUri);
+    formData.append("redirect_uri", redirectUri.toString());
     formData.append("client_id", clientId);
     formData.append("code_verifier", savedCodeVerifier);
 
     let response = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         body: formData,
-        credentials: "include",
         headers: new Headers({
             "Authorization": `Basic ${clientBasicAuthorization}`,
             "Content-Type": "application/x-www-form-urlencoded",
@@ -108,7 +108,7 @@ export async function handleCodeResponseAsync({ code, state, redirectUri }) {
 export async function refreshAccessTokenAsync() {
     let { clientBasicAuthorization, refreshToken, clientId } = parseFromLocalStorage();
 
-    let formData = new FormData();
+    let formData = new URLSearchParams();
     formData.append("grant_type", "refresh_token");
     formData.append("refresh_token", refreshToken);
     formData.append("client_id", clientId);
