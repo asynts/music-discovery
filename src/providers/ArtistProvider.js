@@ -10,6 +10,7 @@ Artist {
     id: ArtistId
     name: string
     expand: boolean
+    viewed: boolean
 
     relatedArtistIds: list[ArtistId]?
     topTrackIds: list[TrackId]?
@@ -92,6 +93,13 @@ function reducer(state, action) {
     case actions.SET_SELECTED_ARTIST_ID:
         return {
             ...state,
+            artists: {
+                ...state.artists,
+                [action.payload]: {
+                    ...state.artists[action.payload],
+                    viewed: true,
+                },
+            },
             selectedArtistId: action.payload,
         };
     case actions.LOAD_ARTISTS_IF_NOT_EXIST:

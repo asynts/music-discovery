@@ -29,6 +29,7 @@ export async function fetchArtistAsync(artist_id) {
         id: json.id,
         name: json.name,
         expand: false,
+        viewed: false,
         relatedArtistIds: null,
         topTrackIds: null,
     };
@@ -43,6 +44,7 @@ export async function fetchRelatedArtistsAsync(artist_id) {
         id: artist.id,
         name: artist.name,
         expand: false,
+        viewed: false,
         relatedArtistIds: null,
         topTrackIds: null,
     }));

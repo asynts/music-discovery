@@ -35,10 +35,20 @@ function ArtistTree(props) {
         isSelectedArtist = true;
     }
 
+    let name_className = "name";
+
+    if (isSelectedArtist) {
+        name_className += " selected";
+    }
+
+    if (props.artist.viewed) {
+        name_className += " viewed";
+    }
+
     return (
         <div className="c-ArtistTree">
             <div className="expand" onClick={() => toggleExpand(props.artist)}>{props.artist.expand ? "-" : "+"}</div>
-            <div onClick={onClick} className={isSelectedArtist ? "name selected" : "name"}>{props.artist.name}</div>
+            <div onClick={onClick} className={name_className}>{props.artist.name}</div>
             <div className="children">
                 {relatedArtists.map(relatedArtist =>
                     <div className="child" key={relatedArtist.id}>

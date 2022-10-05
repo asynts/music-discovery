@@ -38,9 +38,14 @@
     cursor: pointer;
 }
 
+.c-ArtistTree .name.viewed {
+    color: grey;
+}
+
 .c-ArtistTree .name.selected {
     font-weight: bold;
     text-decoration: underline;
+    color: inherit;
 }
 
 .c-ArtistTree .children {
