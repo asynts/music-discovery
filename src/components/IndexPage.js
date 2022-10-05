@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useId, useState } from "react";
+import { useNavigate, useResolvedPath } from "react-router-dom";
 
 import { NorthStar } from "./NorthStar.js";
 
@@ -36,14 +36,33 @@ function RootArtistForm(props) {
 }
 
 function AuthForm(props) {
+    let resolvePath = useResolvedPath();
+
+    let clientId_htmlId = useId();
+    let clientSecret_htmlId = useId();
+
+    let [clientId, setClientId] = useState("");
+    let [clientSecret, setClientSecret] = useState("");
+
     function onClick(event) {
-        redirectToSpotifyAuthentication();
+        redirectToSpotifyAuthentication({
+            redirectUri: resolvePath("/auth_endpoint"),
+            clientId,
+            clientSecret,
+        });
     }
 
     return (
         <div className="c-AuthForm">
             <div>
                 You need to authorize this application to use Spotify on your behalf.
+            </div>
+            <div>
+                <label for={clientId_htmlId}>Client Id:</label>
+                <input id={clientId_htmlId} value={clientId} onChange={event => setClientId(event.target.value)} />
+
+                <label for={clientSecret_htmlId}>Client Secret:</label>
+                <input id={clientSecret_htmlId} value={clientSecret} onChange={event => setClientSecret(event.target.value)} />
             </div>
             <button onClick={onClick}>Login with Spotify</button>
         </div>
