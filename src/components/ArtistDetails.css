@@ -17,7 +17,12 @@
     cursor: pointer;
 }
 
+.c-ArtistDetails .tracks .track.viewed {
+    color: grey;
+}
+
 .c-ArtistDetails .tracks .track.selected {
     font-weight: bold;
     text-decoration: underline;
+    color: inherit;
 }

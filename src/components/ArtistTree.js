@@ -30,14 +30,9 @@ function ArtistTree(props) {
         relatedArtists = [];
     }
 
-    let isSelectedArtist = false;
-    if (selectedArtist !== null && selectedArtist.id === props.artist.id) {
-        isSelectedArtist = true;
-    }
-
     let name_className = "name";
 
-    if (isSelectedArtist) {
+    if (selectedArtist !== null && selectedArtist.id === props.artist.id) {
         name_className += " selected";
     }
 

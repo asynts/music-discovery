@@ -21,6 +21,7 @@ TrackId = string
 Track {
     id: TrackId
     name: string
+    viewed: boolean
     previewUrl: string
 }
 
@@ -63,6 +64,13 @@ function reducer(state, action) {
     case actions.SET_SELECTED_TRACK_ID:
         return {
             ...state,
+            tracks: {
+                ...state.tracks,
+                [action.payload]: {
+                    ...state.tracks[action.payload],
+                    viewed: true,
+                },
+            },
             selectedTrackId: action.payload,
         };
     case actions.LOAD_TRACKS_IF_NOT_EXIST:

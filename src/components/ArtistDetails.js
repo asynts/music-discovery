@@ -36,9 +36,19 @@ function ArtistDetails(props) {
                         setSelectedTrack(track);
                     }
 
-                    let isSelectedTrack = selectedTrack?.id === track.id;
+                    let track_className = "track";
+
+                    if (selectedTrack?.id === track.id) {
+                        track_className += " selected";
+                    }
+
+                    console.log(track);
+                    if (track.viewed) {
+                        track_className += " viewed";
+                    }
+
                     return (
-                        <li onClick={onClick_track} className={isSelectedTrack ? "track selected" : "track"} key={track.id}>
+                        <li onClick={onClick_track} className={track_className} key={track.id}>
                             {track.name}
                         </li>
                     );

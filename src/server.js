@@ -58,6 +58,7 @@ export async function fetchTopTracksForArtist(artist_id) {
     return json.tracks.map(track => ({
         id: track.id,
         name: track.name,
+        viewed: false,
         previewUrl: track.preview_url,
     }));
 }
