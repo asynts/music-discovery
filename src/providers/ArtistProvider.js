@@ -22,6 +22,7 @@ Track {
     id: TrackId
     name: string
     viewed: boolean
+    isFavorite: boolean?
     previewUrl: string
 }
 
@@ -52,10 +53,22 @@ let actions = {
     SET_TOP_TRACK_IDS: "SET_TOP_TRACK_IDS",
     SET_SELECTED_TRACK_ID: "SET_SELECTED_TRACK_ID",
     SET_ROOT_ARTIST_ID: "SET_ROOT_ARTIST_ID",
+    SET_TRACK_IS_FAVORITE: "SET_TRACK_IS_FAVORITE",
 };
 
 function reducer(state, action) {
     switch (action.type) {
+    case actions.SET_TRACK_IS_FAVORITE:
+        return {
+            ...state,
+            tracks: {
+                ...state.tracks,
+                [action.payload.id]: {
+                    ...state.tracks[action.payload.id],
+                    isFavorite: action.payload.value,
+                },
+            },
+        };
     case actions.SET_ROOT_ARTIST_ID:
         return {
             ...state,
@@ -218,7 +231,7 @@ export function ArtistProvider(props) {
                 return;
             }
 
-            let topTracks = await server.fetchTopTracksForArtist(artist.id);
+            let topTracks = await server.fetchTopTracksForArtistAsync(artist.id);
 
             dispatch({
                 type: actions.LOAD_TRACKS_IF_NOT_EXIST,
@@ -272,6 +285,21 @@ export function ArtistProvider(props) {
             dispatch({
                 type: actions.SET_SELECTED_TRACK_ID,
                 payload: track.id,
+            });
+        },
+        async toggleTrackIsFavoriteAsync(track) {
+            if (track.isFavorite) {
+                await server.unmarkTrackAsFavoriteAsync(track.id);
+            } else {
+                await server.markTrackAsFavoriteAsync(track.id);
+            }
+
+            dispatch({
+                type: actions.SET_TRACK_IS_FAVORITE,
+                payload: {
+                    id: track.id,
+                    value: !track.isFavorite,
+                },
             });
         },
     };

@@ -1,0 +1,11 @@
+.c-FavoriteButton {
+    display: inline;
+}
+
+.c-FavoriteButton div {
+    display: inline;
+}
+
+.c-FavoriteButton .disabled {
+    color: grey !important;
+}

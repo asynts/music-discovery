@@ -1,5 +1,7 @@
 import { useContext, useEffect } from "react";
 
+import { FavoriteButton } from "./FavoriteButton.js";
+
 import { ArtistContext } from "../providers/ArtistProvider.js";
 
 import "./ArtistDetails.css";
@@ -42,14 +44,13 @@ function ArtistDetails(props) {
                         track_className += " selected";
                     }
 
-                    console.log(track);
                     if (track.viewed) {
                         track_className += " viewed";
                     }
 
                     return (
                         <li onClick={onClick_track} className={track_className} key={track.id}>
-                            {track.name}
+                            {track.name} <FavoriteButton track={track} />
                         </li>
                     );
                 })}

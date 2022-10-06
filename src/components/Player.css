@@ -1,4 +1,8 @@
 .c-Player {
+    display: grid;
+
+    grid-template-columns: 1fr auto;
+
     border-top: 2px solid grey;
 }
 
