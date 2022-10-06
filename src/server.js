@@ -1,4 +1,4 @@
-import { parseFromLocalStorage } from "./auth.js";
+import { parseFromLocalStorage, refreshAccessTokenAsync } from "./auth.js";
 
 async function spotifyApiGET(path) {
     let { accessToken } = parseFromLocalStorage();
@@ -10,11 +10,18 @@ async function spotifyApiGET(path) {
         }),
     });
 
-    let json = response.json();
+    let json = await response.json();
+
+    if (json.error?.status === 401 && json.error?.message === "The access token expired") {
+        if (await refreshAccessTokenAsync()) {
+            return spotifyApiGET(path);
+        } else {
+            console.log("error: unable to refresh access token")
+        }
+    }
 
     if (!response.ok) {
-        // FIXME: Detect if token expired and refresh.
-        console.log("error returned by spotify:", json);
+        console.log("error: spotify returned error", json);
     }
 
     return json;

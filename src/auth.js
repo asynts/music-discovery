@@ -108,7 +108,7 @@ export async function refreshAccessTokenAsync() {
     formData.append("refresh_token", refreshToken);
     formData.append("client_id", clientId);
 
-    let response = fetch("https://accounts.spotify.com/api/token", {
+    let response = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         body: formData,
         headers: new Headers({
