@@ -11,13 +11,19 @@ async function spotifyApiRequest(method, path, body = undefined) {
         }),
     });
 
-    let json = await response.json();
+    let text = await response.text();
 
-    if (json.error?.status === 401 && json.error?.message === "The access token expired") {
-        if (await refreshAccessTokenAsync()) {
-            return spotifyApiRequest(method, path, body);
-        } else {
-            console.log("error: unable to refresh access token")
+    // We have to be careful here, the server doesn't always return a JSON object.
+    let json = null;
+    if (text.length >= 1) {
+        json = JSON.parse(text);
+
+        if (json.error?.status === 401 && json.error?.message === "The access token expired") {
+            if (await refreshAccessTokenAsync()) {
+                return spotifyApiRequest(method, path, body);
+            } else {
+                console.log("error: unable to refresh access token")
+            }
         }
     }
 
