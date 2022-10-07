@@ -72,6 +72,14 @@ export async function fetchTopTracksForArtistAsync(artist_id) {
     }));
 }
 
+export async function fetchTrackIsFavoriteAsync(track_id) {
+    console.log(`fetchTrackIsFavorite(${track_id})`);
+
+    let json = await spotifyApiRequest("GET", `/me/tracks/contains?ids=${track_id}`);
+
+    return json[0];
+}
+
 export async function markTrackAsFavoriteAsync(track_id) {
     console.log(`markTrackAsFavorite(${track_id})`);
 

@@ -1,4 +1,4 @@
-import { useContext, useId } from "react";
+import { useContext, useEffect, useId } from "react";
 
 import { ArtistContext } from "../providers/ArtistProvider.js";
 
@@ -7,11 +7,17 @@ import "./FavoriteButton.css";
 export function FavoriteButton(props) {
     let id = useId();
 
-    let { toggleTrackIsFavoriteAsync } = useContext(ArtistContext);
+    let { toggleTrackIsFavoriteAsync, fetchTrackIsFavoriteAsync } = useContext(ArtistContext);
 
     function onChange(event) {
         toggleTrackIsFavoriteAsync(props.track);
     }
+
+    useEffect(() => {
+        if (props.track !== null) {
+            fetchTrackIsFavoriteAsync(props.track);
+        }
+    });
 
     // FIXME: useEffect lazy load isFavorite.
 

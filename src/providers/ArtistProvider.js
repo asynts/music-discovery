@@ -302,6 +302,22 @@ export function ArtistProvider(props) {
                 },
             });
         },
+        async fetchTrackIsFavoriteAsync(track) {
+            // Return early if already loaded.
+            if (track.isFavorite !== null) {
+                return;
+            }
+
+            let isFavorite = await server.fetchTrackIsFavoriteAsync(track.id);
+
+            dispatch({
+                type: actions.SET_TRACK_IS_FAVORITE,
+                payload: {
+                    id: track.id,
+                    value: isFavorite,
+                }
+            });
+        }
     };
 
     value.fetchRelatedArtistsAsync = value.fetchRelatedArtistsAsync.bind(value);
