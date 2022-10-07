@@ -2,7 +2,7 @@ import * as oauth from "@panva/oauth4webapi";
 
 import { Base64 } from "js-base64";
 
-let SPOTIFY_SCOPE = "";
+let SPOTIFY_SCOPE = "user-library-read user-library-modify";
 
 export function parseFromLocalStorage() {
     let clientId = localStorage.getItem("spotify-oauth-client-id");
