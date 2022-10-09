@@ -1,11 +1,8 @@
 .c-FavoriteButton {
-    display: inline;
+    cursor: pointer;
+    display: inline-block;
 }
 
-.c-FavoriteButton div {
-    display: inline;
-}
-
-.c-FavoriteButton .disabled {
+.c-FavoriteButton .material-icons.disabled {
     color: grey !important;
 }

@@ -12,7 +12,9 @@ function Player(props) {
     return(
         <div className="c-Player">
             <audio className="audio" controls autoPlay src={selectedTrack?.previewUrl} />
-            <FavoriteButton track={selectedTrack} />
+            <div className="favorite-button-container">
+                <FavoriteButton track={selectedTrack} />
+            </div>
         </div>
     );
 }

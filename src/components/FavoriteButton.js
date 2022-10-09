@@ -1,15 +1,13 @@
-import { useContext, useEffect, useId } from "react";
+import { useContext, useEffect } from "react";
 
 import { ArtistContext } from "../providers/ArtistProvider.js";
 
 import "./FavoriteButton.css";
 
 export function FavoriteButton(props) {
-    let id = useId();
-
     let { toggleTrackIsFavoriteAsync, fetchTrackIsFavoriteAsync } = useContext(ArtistContext);
 
-    function onChange(event) {
+    function onClick(event) {
         toggleTrackIsFavoriteAsync(props.track);
     }
 
@@ -19,17 +17,19 @@ export function FavoriteButton(props) {
         }
     });
 
-    // FIXME: useEffect lazy load isFavorite.
-
     let isDisabled = props.track === null || props.track.isFavorite === null;
+
+    let bookmarkElement = null;
+    if (isDisabled) {
+        bookmarkElement = <div className="material-icons disabled" onClick={onClick}>bookmark_border</div>;
+    } else {
+        bookmarkElement = <div className="material-icons" onClick={onClick}>{props.track.isFavorite ? "bookmark" : "bookmark_border"}</div>;
+    }
 
     return (
         <div className="c-FavoriteButton">
             <div className={isDisabled ? "disabled" : ""}>
-                (
-                <label htmlFor={id}>Favorite</label>
-                <input id={id} type="checkbox" checked={isDisabled ? false : props.track.isFavorite} disabled={isDisabled} onChange={onChange} />
-                )
+                {bookmarkElement}
             </div>
         </div>
     );

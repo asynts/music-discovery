@@ -33,7 +33,7 @@ function ArtistDetails(props) {
                 {props.artist === null ? "No artist selected." : props.artist.name}
             </div>
             <ol className="tracks">
-                {topTracks.map(track => {
+                {topTracks.map((track, trackIndex) => {
                     function onClick(event) {
                         setSelectedTrack(track);
                     }
@@ -50,7 +50,11 @@ function ArtistDetails(props) {
 
                     return (
                         <li className={track_className} key={track.id}>
-                            <span onClick={onClick} className="text">{track.name}</span> <FavoriteButton track={track} />
+                            <span onClick={onClick} className="text">
+                                <span className="number">{trackIndex+1}.</span>
+                                {track.name}
+                            </span>
+                            <FavoriteButton track={track} />
                         </li>
                     );
                 })}

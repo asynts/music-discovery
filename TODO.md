@@ -18,6 +18,4 @@ I have a feature stop for now!
 
 ### Tweaks
 
--   Add icon to favorite button and center it.
-
 -   In `<AuthForm />`, provide some explanation.

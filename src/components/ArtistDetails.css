@@ -13,9 +13,22 @@
     font-size: 16pt;
 }
 
+.c-ArtistDetails .tracks .track {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: left;
+    align-items: center;
+}
+
 .c-ArtistDetails .tracks .track .text {
     cursor: pointer;
     user-select: none;
+}
+
+.c-ArtistDetails .tracks .track .number {
+    display: inline-block;
+    width: 25pt;
 }
 
 .c-ArtistDetails .tracks .track.viewed {
