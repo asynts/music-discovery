@@ -67,9 +67,6 @@ export async function handleCodeResponseAsync({ code, state, redirectUri }) {
     let response = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         body: formData,
-        headers: new Headers({
-            "Content-Type": "application/x-www-form-urlencoded",
-        }),
     });
 
     let json = await response.json();
@@ -96,9 +93,6 @@ export async function refreshAccessTokenAsync() {
     let response = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         body: formData,
-        headers: new Headers({
-            "Content-Type": "application/x-www-form-urlencoded",
-        }),
     });
 
     let json = await response.json();
