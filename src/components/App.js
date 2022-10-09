@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, useRoutes } from "react-router-dom";
 
 import { IndexPage } from "./IndexPage.js";
@@ -10,6 +10,21 @@ import { AuthProvider } from "../providers/AuthProvider.js";
 
 import "./App.css";
 
+function HideRouteFromSearchEngines(props) {
+    // Add '<meta name="robots" content="noindex" />' into '<head>' when mounted.
+    // Remove element when unmounted.
+    useEffect(() => {
+        let metaElement = document.createElement("meta");
+        metaElement.setAttribute("name", "robots");
+        metaElement.setAttribute("content", "noindex");
+
+        document.head.appendChild(metaElement);
+        return () => document.head.removeChild(metaElement);
+    });
+
+    return null;
+}
+
 function AppRoutes(props) {
     return useRoutes([
         {
@@ -18,17 +33,25 @@ function AppRoutes(props) {
         },
         {
             path: "/auth_endpoint",
-            element: <AuthPage />,
+            element: (
+                <>
+                    <HideRouteFromSearchEngines />
+                    <AuthPage />
+                </>
+            ),
         },
         {
             path: "/discover/:paramRootArtistId",
             element: (
                 // FIXME: Is this in the correct order?
-                <AuthProvider>
-                    <ArtistProvider>
-                        <DiscoverPage />
-                    </ArtistProvider>
-                </AuthProvider>
+                <>
+                    <HideRouteFromSearchEngines />
+                    <AuthProvider>
+                        <ArtistProvider>
+                            <DiscoverPage />
+                        </ArtistProvider>
+                    </AuthProvider>
+                </>
             ),
         },
     ]);

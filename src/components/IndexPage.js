@@ -6,8 +6,6 @@ import { NorthStar } from "./NorthStar.js";
 import { isAuthenticated, parseFromLocalStorage, redirectToSpotifyAuthenticationAsync } from "../auth.js";
 import { useRedirectUri } from "../util.js";
 
-import "./IndexPage.css";
-
 function RootArtistForm(props) {
     let [artistId, setArtistId] = useState("");
 
