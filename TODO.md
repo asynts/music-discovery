@@ -6,9 +6,18 @@ I have a feature stop for now!
 
 -   Create a proper design and put some effort in.
 
+-   Search for the root artist.
+
+-   Group API calls together (e.g. fetch favorite.)
+
+-   Allow playing song again by clicking on them.
+
+-   Sometimes, Spotify returns `503 Service Unavailable`, deal with that.
+
+-   Play whole songs.
+
 ### Tweaks
 
--   Only register if user clicks on the text (`<div>` automatically takes whole width.)
+-   Add icon to favorite button and center it.
 
--   Do not allow the user to select text without holding `ALT`.
-    I think this can be done with `user-select: none`.
+-   In `<AuthForm />`, provide some explanation.

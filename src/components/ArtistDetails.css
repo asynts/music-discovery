@@ -13,8 +13,9 @@
     font-size: 16pt;
 }
 
-.c-ArtistDetails .tracks .track {
+.c-ArtistDetails .tracks .track .text {
     cursor: pointer;
+    user-select: none;
 }
 
 .c-ArtistDetails .tracks .track.viewed {

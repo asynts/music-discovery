@@ -43,7 +43,11 @@ function ArtistTree(props) {
     return (
         <div className="c-ArtistTree">
             <div className="expand" onClick={() => toggleExpand(props.artist)}>{props.artist.expand ? "-" : "+"}</div>
-            <div onClick={onClick} className={name_className}>{props.artist.name}</div>
+            <div className={name_className}>
+                <div>
+                    <span onClick={onClick}>{props.artist.name}</span>
+                </div>
+            </div>
             <div className="children">
                 {relatedArtists.map(relatedArtist =>
                     <div className="child" key={relatedArtist.id}>
