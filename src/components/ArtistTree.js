@@ -52,7 +52,9 @@ function ArtistTree(props) {
                 {relatedArtists.map(relatedArtist =>
                     <div className="child" key={relatedArtist.id}>
                         <div className="arrow-container">
-                            <div className="arrow">&gt;</div>
+                            <div className="arrow">
+                                <div className="material-icons">subdirectory_arrow_right</div>
+                            </div>
                         </div>
                         <ArtistTree artist={relatedArtist} />
                     </div>

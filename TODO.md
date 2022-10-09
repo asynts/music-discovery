@@ -29,8 +29,6 @@ I have a feature stop for now!
 -   In `<AuthForm />`, provide some explanation.
     The application should be self-explanatory.
 
--   Use icon for arrow.
-
 ### Code Smells
 
 -   Are `<ArtistProvider />` and `<AuthProvider />` in the correct order?
