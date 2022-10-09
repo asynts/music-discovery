@@ -12,8 +12,6 @@ import "./DiscoverPage.css";
 
 // Route: /discover/:paramRootArtistId
 export function DiscoverPage(props) {
-    // FIXME: useParams
-
     let { rootArtist, setRootArtistAsync, selectedArtist, selectedTrack } = useContext(ArtistContext);
 
     let { paramRootArtistId } = useParams();
