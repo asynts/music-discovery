@@ -31,8 +31,6 @@ I have a feature stop for now!
 
 -   Use icon for arrow.
 
--   Configure `robots.txt`.
-
 ### Code Smells
 
 -   Are `<ArtistProvider />` and `<AuthProvider />` in the correct order?
