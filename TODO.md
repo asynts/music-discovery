@@ -24,8 +24,6 @@ I have a feature stop for now!
 
 ### Tweaks
 
--   Write README.md.
-
 -   In `<AuthForm />`, provide some explanation.
     The application should be self-explanatory.
 
