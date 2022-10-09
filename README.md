@@ -26,6 +26,10 @@ In order to use the application you need to authenticate at Spotify.
 This will provide the application with an access token which is used to interact with Spotify on your behalf.
 The token is stored in your browser and is never send to any server other than Spotify.
 
+### Screenshots
+
+![Looking at artists similar to "Twenty One Pilots" and currently playing the track "Sweet Disaster" made by the "DREAMERS".][4]
+
 ### Notes
 
 This is in an early state of development:
@@ -42,3 +46,4 @@ This is in an early state of development:
   [1]: https://musicroamer.com/
   [2]: https://www.gnoosic.com/
   [3]: https://md.asynts.com/
+  [4]: docs/media/0001_screenshot.png
