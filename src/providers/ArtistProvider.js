@@ -45,20 +45,22 @@ let initialValue = {
 };
 
 let actions = {
-    SET_EXPAND: "SET_EXPAND",
-    SET_RELATED_ARTIST_IDS: "SET_RELATED_ARTIST_IDS",
-    SET_SELECTED_ARTIST_ID: "SET_SELECTED_ARTIST_ID",
     LOAD_ARTISTS_IF_NOT_EXIST: "LOAD_ARTISTS_IF_NOT_EXIST",
+    SET_ARTISTS_EXPAND: "SET_ARTISTS_EXPAND",
+    SET_ARTISTS_RELATED_ARTIST_IDS: "SET_ARTISTS_RELATED_ARTIST_IDS",
+    SET_ARTISTS_TOP_TRACK_IDS: "SET_ARTISTS_TOP_TRACK_IDS",
+
     LOAD_TRACKS_IF_NOT_EXIST: "LOAD_TRACKS_IF_NOT_EXIST",
-    SET_TOP_TRACK_IDS: "SET_TOP_TRACK_IDS",
+    SET_TRACKS_BOOKMARKED: "SET_TRACKS_BOOKMARKED",
+
+    SET_SELECTED_ARTIST_ID: "SET_SELECTED_ARTIST_ID",
     SET_SELECTED_TRACK_ID: "SET_SELECTED_TRACK_ID",
     SET_ROOT_ARTIST_ID: "SET_ROOT_ARTIST_ID",
-    SET_TRACK_BOOKMARKED: "SET_TRACK_BOOKMARKED",
 };
 
 function reducer(state, action) {
     switch (action.type) {
-    case actions.SET_TRACK_BOOKMARKED:
+    case actions.SET_TRACKS_BOOKMARKED:
         return {
             ...state,
             tracks: {
@@ -100,7 +102,7 @@ function reducer(state, action) {
                 ...state.tracks,
             }
         };
-    case actions.SET_TOP_TRACK_IDS:
+    case actions.SET_ARTISTS_TOP_TRACK_IDS:
         return {
             ...state,
             artists: {
@@ -137,7 +139,7 @@ function reducer(state, action) {
                 ...state.artists,
             },
         };
-    case actions.SET_EXPAND:
+    case actions.SET_ARTISTS_EXPAND:
         return {
             ...state,
             artists: {
@@ -148,7 +150,7 @@ function reducer(state, action) {
                 },
             },
         };
-    case actions.SET_RELATED_ARTIST_IDS:
+    case actions.SET_ARTISTS_RELATED_ARTIST_IDS:
         return {
             ...state,
             artists: {
@@ -217,7 +219,7 @@ export function ArtistProvider(props) {
             });
 
             dispatch({
-                type: actions.SET_RELATED_ARTIST_IDS,
+                type: actions.SET_ARTISTS_RELATED_ARTIST_IDS,
                 payload: {
                     id: artist.id,
                     value: relatedArtists.map(artist => artist.id),
@@ -239,7 +241,7 @@ export function ArtistProvider(props) {
             });
 
             dispatch({
-                type: actions.SET_TOP_TRACK_IDS,
+                type: actions.SET_ARTISTS_TOP_TRACK_IDS,
                 payload: {
                     id: artist.id,
                     value: topTracks.map(track => track.id),
@@ -268,7 +270,7 @@ export function ArtistProvider(props) {
         },
         toggleExpand(artist) {
             dispatch({
-                type: actions.SET_EXPAND,
+                type: actions.SET_ARTISTS_EXPAND,
                 payload: {
                     id: artist.id,
                     value: !artist.expand,
@@ -295,7 +297,7 @@ export function ArtistProvider(props) {
             }
 
             dispatch({
-                type: actions.SET_TRACK_BOOKMARKED,
+                type: actions.SET_TRACKS_BOOKMARKED,
                 payload: {
                     id: track.id,
                     value: !track.bookmarked,
@@ -311,7 +313,7 @@ export function ArtistProvider(props) {
             let bookmarked = await server.fetchTrackBookmarkAsync(track.id);
 
             dispatch({
-                type: actions.SET_TRACK_BOOKMARKED,
+                type: actions.SET_TRACKS_BOOKMARKED,
                 payload: {
                     id: track.id,
                     value: bookmarked,
