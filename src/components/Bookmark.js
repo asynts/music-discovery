@@ -5,15 +5,18 @@ import { ArtistContext } from "../providers/ArtistProvider.js";
 import "./Bookmark.css";
 
 export function Bookmark(props) {
-    let { toggleBookmarkAsync, fetchTrackBookmarkAsync } = useContext(ArtistContext);
+    let {
+        fetchTrackBookmarkedAsync,
+        setTrackBookmarkedAsync,
+    } = useContext(ArtistContext);
 
     function onClick(event) {
-        toggleBookmarkAsync(props.track);
+        setTrackBookmarkedAsync(props.track, props.track.bookmarked);
     }
 
     useEffect(() => {
         if (props.track !== null) {
-            fetchTrackBookmarkAsync(props.track);
+            fetchTrackBookmarkedAsync(props.track);
         }
     });
 
@@ -21,7 +24,7 @@ export function Bookmark(props) {
 
     let bookmarkElement = null;
     if (isDisabled) {
-        bookmarkElement = <div className="material-icons disabled" onClick={onClick}>bookmark_border</div>;
+        bookmarkElement = <div className="material-icons disabled">bookmark_border</div>;
     } else {
         bookmarkElement = <div className="material-icons" onClick={onClick}>{props.track.bookmarked ? "bookmark" : "bookmark_border"}</div>;
     }

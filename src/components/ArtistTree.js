@@ -6,18 +6,20 @@ import { ArtistContext } from "../providers/ArtistProvider.js";
 
 function ArtistTree(props) {
     let {
-        toggleExpand,
-        getRelatedArtists,
-        fetchRelatedArtistsAsync,
+        fetchArtistRelatedArtists,
+        setArtistExpand,
+
         setSelectedArtist,
         selectedArtist,
+
+        getRelatedArtists,
     } = useContext(ArtistContext);
 
     useEffect(() => {
         if (props.artist.expand) {
-            fetchRelatedArtistsAsync(props.artist);
+            fetchArtistRelatedArtists(props.artist);
         }
-    });
+    }, [props.artist, fetchArtistRelatedArtists]);
 
     function onClick(event) {
         setSelectedArtist(props.artist);
@@ -42,7 +44,7 @@ function ArtistTree(props) {
 
     return (
         <div className="c-ArtistTree">
-            <div className="expand" onClick={() => toggleExpand(props.artist)}>{props.artist.expand ? "-" : "+"}</div>
+            <div className="expand" onClick={() => setArtistExpand(props.artist, !props.artist.expand)}>{props.artist.expand ? "-" : "+"}</div>
             <div className={name_className}>
                 <div>
                     <span onClick={onClick}>{props.artist.name}</span>

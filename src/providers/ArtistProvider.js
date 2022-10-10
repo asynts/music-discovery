@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useCallback, useReducer } from "react";
 
 import * as server from "../server.js";
 import { ASSERT_NOT_REACHED } from "../util.js";
@@ -168,28 +168,157 @@ function reducer(state, action) {
 
 export const ArtistContext = createContext();
 
-async function fetchArtistAsync({ dispatch, artistId }) {
-    let artist = await server.fetchArtistAsync(artistId);
-
-    dispatch({
-        type: actions.LOAD_ARTISTS_IF_NOT_EXIST,
-        payload: [
-            artist,
-        ],
-    });
-}
-
-async function setRootArtistAsync({ dispatch, rootArtistId }) {
-    await fetchArtistAsync({ dispatch, artistId: rootArtistId });
-
-    dispatch({
-        type: actions.SET_ROOT_ARTIST_ID,
-        payload: rootArtistId,
-    });
-}
-
 export function ArtistProvider(props) {
     let [state, dispatch] = useReducer(reducer, initialValue);
+
+    let fetchArtistAsync = useCallback(async artistId => {
+        let artist = await server.fetchArtistAsync(artistId);
+
+        dispatch({
+            type: actions.LOAD_ARTISTS_IF_NOT_EXIST,
+            payload: [
+                artist,
+            ],
+        });
+    }, []);
+
+    let fetchArtistRelatedArtists = useCallback(async artist => {
+        // Return early if already loaded.
+        // The server could return different results, but we don't really care.
+        if (artist.relatedArtistIds !== null) {
+            return;
+        }
+
+        let relatedArtists = await server.fetchRelatedArtistsAsync(artist.id);
+
+        // Prevent infinite loop where artists are directly or indirectly related to themselves.
+        // We simply sort out artists that are already known to us.
+        relatedArtists = relatedArtists.filter(artist => !(artist.id in state.artists));
+
+        dispatch({
+            type: actions.LOAD_ARTISTS_IF_NOT_EXIST,
+            payload: relatedArtists,
+        });
+
+        dispatch({
+            type: actions.SET_ARTISTS_RELATED_ARTIST_IDS,
+            payload: {
+                id: artist.id,
+                value: relatedArtists.map(artist => artist.id),
+            },
+        });
+    }, [state.artists]);
+
+    let fetchArtistTopTracksAsync = useCallback(async artist => {
+        // Return early if already loaded.
+        // The server could return different results, but we don't really care.
+        if (artist.topTrackIds !== null) {
+            return;
+        }
+
+        let topTracks = await server.fetchTopTracksForArtistAsync(artist.id);
+
+        dispatch({
+            type: actions.LOAD_TRACKS_IF_NOT_EXIST,
+            payload: topTracks,
+        });
+
+        dispatch({
+            type: actions.SET_ARTISTS_TOP_TRACK_IDS,
+            payload: {
+                id: artist.id,
+                value: topTracks.map(track => track.id),
+            },
+        });
+    }, []);
+
+    let setArtistExpand = useCallback((artist, expand) => {
+        dispatch({
+            type: actions.SET_ARTISTS_EXPAND,
+            payload: {
+                id: artist.id,
+                value: expand,
+            },
+        });
+    }, []);
+
+    let fetchTrackBookmarkedAsync = useCallback(async track => {
+        // Return early if already loaded.
+        if (track.bookmarked !== null) {
+            return;
+        }
+
+        let bookmarked = await server.fetchTrackBookmarkAsync(track.id);
+
+        dispatch({
+            type: actions.SET_TRACKS_BOOKMARKED,
+            payload: {
+                id: track.id,
+                value: bookmarked,
+            }
+        });
+    }, []);
+
+    let setTrackBookmarkedAsync = useCallback(async track => {
+        if (track.bookmarked) {
+            await server.bookmarkTrackAsync(track.id);
+        } else {
+            await server.unbookmarkTrackAsync(track.id);
+        }
+
+        dispatch({
+            type: actions.SET_TRACKS_BOOKMARKED,
+            payload: {
+                id: track.id,
+                value: !track.bookmarked,
+            },
+        });
+    }, []);
+
+    let setRootArtistAsync = useCallback(async rootArtistId => {
+        await fetchArtistAsync(rootArtistId);
+
+        dispatch({
+            type: actions.SET_ROOT_ARTIST_ID,
+            payload: rootArtistId,
+        });
+    }, [fetchArtistAsync]);
+
+    let setSelectedArtist = useCallback(artist => {
+        dispatch({
+            type: actions.SET_SELECTED_ARTIST_ID,
+            payload: artist.id,
+        });
+    }, []);
+
+    let setSelectedTrack = useCallback(track => {
+        dispatch({
+            type: actions.SET_SELECTED_TRACK_ID,
+            payload: track.id,
+        });
+    }, []);
+
+    let getRelatedArtists = useCallback(artist => {
+        if (artist.relatedArtistIds === null) {
+            // Related artists are lazily loaded.
+            // The caller should trigger 'fetchRelatedArtistsAsync' in 'useEffect'.
+            return [];
+        } else {
+            return artist.relatedArtistIds
+                .map(id => state.artists[id]);
+        }
+    }, [state.artists]);
+
+    let getTopTracksForArtist = useCallback(artist => {
+        if (artist.topTrackIds === null) {
+            // Related tracks are lazily loaded.
+            // The caller should trigger 'fetchTopTracksForArtistAsync' in 'useEffect'.
+            return [];
+        } else {
+            return artist.topTrackIds
+                .map(id => state.tracks[id]);
+        }
+    }, [state.tracks]);
 
     let value = {
         artists: state.artists,
@@ -197,134 +326,22 @@ export function ArtistProvider(props) {
         selectedArtist: state.artists[state.selectedArtistId] || null,
         selectedTrack: state.tracks[state.selectedTrackId] || null,
 
-        fetchArtistAsync: artistId => fetchArtistAsync({ dispatch, artistId }),
-        setRootArtistAsync: rootArtistId => setRootArtistAsync({ dispatch, rootArtistId }),
+        fetchArtistAsync,
+        fetchArtistRelatedArtists,
+        fetchArtistTopTracksAsync,
+        setArtistExpand,
 
-        async fetchRelatedArtistsAsync(artist) {
-            // Return early if already loaded.
-            // The server could return different results, but we don't really care.
-            if (artist.relatedArtistIds !== null) {
-                return;
-            }
+        fetchTrackBookmarkedAsync,
+        setTrackBookmarkedAsync,
 
-            let relatedArtists = await server.fetchRelatedArtistsAsync(artist.id);
+        setRootArtistAsync,
+        setSelectedArtist,
+        setSelectedTrack,
 
-            // Prevent infinite loop where artists are directly or indirectly related to themselves.
-            // We simply sort out artists that are already known to us.
-            relatedArtists = relatedArtists.filter(artist => !(artist.id in state.artists));
-
-            dispatch({
-                type: actions.LOAD_ARTISTS_IF_NOT_EXIST,
-                payload: relatedArtists,
-            });
-
-            dispatch({
-                type: actions.SET_ARTISTS_RELATED_ARTIST_IDS,
-                payload: {
-                    id: artist.id,
-                    value: relatedArtists.map(artist => artist.id),
-                },
-            });
-        },
-        async fetchTopTracksForArtistAsync(artist) {
-            // Return early if already loaded.
-            // The server could return different results, but we don't really care.
-            if (artist.topTrackIds !== null) {
-                return;
-            }
-
-            let topTracks = await server.fetchTopTracksForArtistAsync(artist.id);
-
-            dispatch({
-                type: actions.LOAD_TRACKS_IF_NOT_EXIST,
-                payload: topTracks,
-            });
-
-            dispatch({
-                type: actions.SET_ARTISTS_TOP_TRACK_IDS,
-                payload: {
-                    id: artist.id,
-                    value: topTracks.map(track => track.id),
-                },
-            });
-        },
-        getRelatedArtists(artist) {
-            if (artist.relatedArtistIds === null) {
-                // Related artists are lazily loaded.
-                // The caller should trigger 'fetchRelatedArtistsAsync' in 'useEffect'.
-                return [];
-            } else {
-                return artist.relatedArtistIds
-                    .map(id => state.artists[id]);
-            }
-        },
-        getTopTracksForArtist(artist) {
-            if (artist.topTrackIds === null) {
-                // Related tracks are lazily loaded.
-                // The caller should trigger 'fetchTopTracksForArtistAsync' in 'useEffect'.
-                return [];
-            } else {
-                return artist.topTrackIds
-                    .map(id => state.tracks[id]);
-            }
-        },
-        toggleExpand(artist) {
-            dispatch({
-                type: actions.SET_ARTISTS_EXPAND,
-                payload: {
-                    id: artist.id,
-                    value: !artist.expand,
-                },
-            });
-        },
-        setSelectedArtist(artist) {
-            dispatch({
-                type: actions.SET_SELECTED_ARTIST_ID,
-                payload: artist.id,
-            });
-        },
-        setSelectedTrack(track) {
-            dispatch({
-                type: actions.SET_SELECTED_TRACK_ID,
-                payload: track.id,
-            });
-        },
-        async toggleTrackBookmarkAsync(track) {
-            if (track.bookmarked) {
-                await server.bookmarkTrackAsync(track.id);
-            } else {
-                await server.unbookmarkTrackAsync(track.id);
-            }
-
-            dispatch({
-                type: actions.SET_TRACKS_BOOKMARKED,
-                payload: {
-                    id: track.id,
-                    value: !track.bookmarked,
-                },
-            });
-        },
-        async fetchTrackBookmarkAsync(track) {
-            // Return early if already loaded.
-            if (track.bookmarked !== null) {
-                return;
-            }
-
-            let bookmarked = await server.fetchTrackBookmarkAsync(track.id);
-
-            dispatch({
-                type: actions.SET_TRACKS_BOOKMARKED,
-                payload: {
-                    id: track.id,
-                    value: bookmarked,
-                }
-            });
-        }
+        // FIXME: Do this automatically when mapping the members.
+        getRelatedArtists,
+        getTopTracksForArtist,
     };
-
-    value.fetchRelatedArtistsAsync = value.fetchRelatedArtistsAsync.bind(value);
-    value.getRelatedArtists = value.getRelatedArtists.bind(value);
-    value.toggleExpand = value.toggleExpand.bind(value);
 
     return (
         <ArtistContext.Provider value={value}>

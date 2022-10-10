@@ -8,17 +8,19 @@ import "./ArtistDetails.css";
 
 function ArtistDetails(props) {
     let {
-        fetchTopTracksForArtistAsync,
-        getTopTracksForArtist,
+        fetchArtistTopTracksAsync,
+
         selectedTrack,
         setSelectedTrack,
+
+        getTopTracksForArtist,
     } = useContext(ArtistContext)
 
     useEffect(() => {
         if (props.artist !== null) {
-            fetchTopTracksForArtistAsync(props.artist);
+            fetchArtistTopTracksAsync(props.artist);
         }
-    });
+    }, [props.artist, fetchArtistTopTracksAsync]);
 
     let topTracks = null;
     if (props.artist !== null) {

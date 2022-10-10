@@ -12,13 +12,19 @@ import "./DiscoverPage.css";
 
 // Route: /discover/:paramRootArtistId
 export function DiscoverPage(props) {
-    let { rootArtist, setRootArtistAsync, selectedArtist, selectedTrack } = useContext(ArtistContext);
+    let {
+        selectedArtist,
+        selectedTrack,
+
+        rootArtist,
+        setRootArtistAsync,
+    } = useContext(ArtistContext);
 
     let { paramRootArtistId } = useParams();
 
     useEffect(() => {
         setRootArtistAsync(paramRootArtistId);
-    }, [paramRootArtistId]);
+    }, [paramRootArtistId, setRootArtistAsync]);
 
     return (
         <div className="c-DiscoverPage">
