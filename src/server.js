@@ -65,7 +65,7 @@ export async function fetchRelatedArtistsAsync(artist_id) {
 }
 
 export async function fetchTopTracksForArtistAsync(artist_id) {
-    console.log(`fetchTopTracksForArtist(${artist_id})`);
+    console.log(`fetchTopTracksForArtistAsync(${artist_id})`);
 
     let json = await spotifyApiRequest("GET", `/artists/${artist_id}/top-tracks?market=DE`);
 
@@ -73,21 +73,21 @@ export async function fetchTopTracksForArtistAsync(artist_id) {
         id: track.id,
         name: track.name,
         viewed: false,
-        isFavorite: null,
+        bookmarked: null,
         previewUrl: track.preview_url,
     }));
 }
 
-export async function fetchTrackIsFavoriteAsync(track_id) {
-    console.log(`fetchTrackIsFavorite(${track_id})`);
+export async function fetchTrackBookmarkAsync(track_id) {
+    console.log(`fetchTrackBookmarkAsync(${track_id})`);
 
     let json = await spotifyApiRequest("GET", `/me/tracks/contains?ids=${track_id}`);
 
     return json[0];
 }
 
-export async function markTrackAsFavoriteAsync(track_id) {
-    console.log(`markTrackAsFavorite(${track_id})`);
+export async function bookmarkTrackAsync(track_id) {
+    console.log(`bookmarkTrackAsync(${track_id})`);
 
     await spotifyApiRequest("PUT", `/me/tracks`, {
         ids: [
@@ -96,8 +96,8 @@ export async function markTrackAsFavoriteAsync(track_id) {
     });
 }
 
-export async function unmarkTrackAsFavoriteAsync(track_id) {
-    console.log(`unmarkTrackAsFavorite(${track_id})`);
+export async function unbookmarkTrackAsync(track_id) {
+    console.log(`unbookmarkTrackAsync(${track_id})`);
 
     await spotifyApiRequest("DELETE", `/me/tracks`, {
         ids: [

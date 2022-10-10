@@ -8,7 +8,7 @@ I have a feature stop for now!
 
 -   Search for the root artist.
 
--   Group API calls together (e.g. fetch favorite.)
+-   Group API calls together (e.g. fetch bookmark.)
 
     I get a `429 Too Many Requests` currently.
 
@@ -24,15 +24,11 @@ I have a feature stop for now!
 
 ### Tweaks
 
--   In `<AuthForm />`, provide some explanation.
-    The application should be self-explanatory.
+-   Run a spell checker on the codebase.
 
 ### Code Smells
 
 -   Are `<ArtistProvider />` and `<AuthProvider />` in the correct order?
-
--   `<FavoriteButton />` should be `<Bookmark />`.
-    Related functions should be renamed as well.
 
 -   Cleanup `<ArtistProvider />`.
     Look for examples online.

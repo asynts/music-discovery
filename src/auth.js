@@ -83,12 +83,12 @@ export async function handleCodeResponseAsync({ code, state, redirectUri }) {
 
 // Use refresh token to obtain up-to-date access token.
 export async function refreshAccessTokenAsync() {
-    let { refreshToken, clientId } = parseFromLocalStorage();
+    let { refreshToken } = parseFromLocalStorage();
 
     let formData = new URLSearchParams();
     formData.append("grant_type", "refresh_token");
     formData.append("refresh_token", refreshToken);
-    formData.append("client_id", clientId);
+    formData.append("client_id", SPOTIFY_CLIENT_ID);
 
     let response = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",

@@ -22,7 +22,7 @@ Track {
     id: TrackId
     name: string
     viewed: boolean
-    isFavorite: boolean?
+    bookmarked: boolean?
     previewUrl: string
 }
 
@@ -53,19 +53,19 @@ let actions = {
     SET_TOP_TRACK_IDS: "SET_TOP_TRACK_IDS",
     SET_SELECTED_TRACK_ID: "SET_SELECTED_TRACK_ID",
     SET_ROOT_ARTIST_ID: "SET_ROOT_ARTIST_ID",
-    SET_TRACK_IS_FAVORITE: "SET_TRACK_IS_FAVORITE",
+    SET_TRACK_BOOKMARKED: "SET_TRACK_BOOKMARKED",
 };
 
 function reducer(state, action) {
     switch (action.type) {
-    case actions.SET_TRACK_IS_FAVORITE:
+    case actions.SET_TRACK_BOOKMARKED:
         return {
             ...state,
             tracks: {
                 ...state.tracks,
                 [action.payload.id]: {
                     ...state.tracks[action.payload.id],
-                    isFavorite: action.payload.value,
+                    bookmarked: action.payload.value,
                 },
             },
         };
@@ -287,34 +287,34 @@ export function ArtistProvider(props) {
                 payload: track.id,
             });
         },
-        async toggleTrackIsFavoriteAsync(track) {
-            if (track.isFavorite) {
-                await server.unmarkTrackAsFavoriteAsync(track.id);
+        async toggleTrackBookmarkAsync(track) {
+            if (track.bookmarked) {
+                await server.bookmarkTrackAsync(track.id);
             } else {
-                await server.markTrackAsFavoriteAsync(track.id);
+                await server.unbookmarkTrackAsync(track.id);
             }
 
             dispatch({
-                type: actions.SET_TRACK_IS_FAVORITE,
+                type: actions.SET_TRACK_BOOKMARKED,
                 payload: {
                     id: track.id,
-                    value: !track.isFavorite,
+                    value: !track.bookmarked,
                 },
             });
         },
-        async fetchTrackIsFavoriteAsync(track) {
+        async fetchTrackBookmarkAsync(track) {
             // Return early if already loaded.
-            if (track.isFavorite !== null) {
+            if (track.bookmarked !== null) {
                 return;
             }
 
-            let isFavorite = await server.fetchTrackIsFavoriteAsync(track.id);
+            let bookmarked = await server.fetchTrackBookmarkAsync(track.id);
 
             dispatch({
-                type: actions.SET_TRACK_IS_FAVORITE,
+                type: actions.SET_TRACK_BOOKMARKED,
                 payload: {
                     id: track.id,
-                    value: isFavorite,
+                    value: bookmarked,
                 }
             });
         }

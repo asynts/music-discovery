@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 
-import { FavoriteButton } from "./FavoriteButton.js";
+import { Bookmark } from "./Bookmark.js";
 
 import { ArtistContext } from "../providers/ArtistProvider.js";
 
@@ -54,7 +54,7 @@ function ArtistDetails(props) {
                                 <span className="number">{trackIndex+1}.</span>
                                 {track.name}
                             </span>
-                            <FavoriteButton track={track} />
+                            <Bookmark track={track} />
                         </li>
                     );
                 })}

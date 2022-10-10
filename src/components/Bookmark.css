@@ -1,8 +1,8 @@
-.c-FavoriteButton {
+.c-Bookmark {
     cursor: pointer;
     display: inline-block;
 }
 
-.c-FavoriteButton .material-icons.disabled {
+.c-Bookmark .material-icons.disabled {
     color: grey !important;
 }
