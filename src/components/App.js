@@ -20,7 +20,7 @@ function HideRouteFromSearchEngines(props) {
 
         document.head.appendChild(metaElement);
         return () => document.head.removeChild(metaElement);
-    });
+    }, []);
 
     return null;
 }

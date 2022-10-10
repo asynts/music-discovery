@@ -301,7 +301,6 @@ export function ArtistProvider(props) {
     let getRelatedArtists = useCallback(artist => {
         if (artist.relatedArtistIds === null) {
             // Related artists are lazily loaded.
-            // The caller should trigger 'fetchRelatedArtistsAsync' in 'useEffect'.
             return [];
         } else {
             return artist.relatedArtistIds
@@ -312,7 +311,6 @@ export function ArtistProvider(props) {
     let getTopTracksForArtist = useCallback(artist => {
         if (artist.topTrackIds === null) {
             // Related tracks are lazily loaded.
-            // The caller should trigger 'fetchTopTracksForArtistAsync' in 'useEffect'.
             return [];
         } else {
             return artist.topTrackIds

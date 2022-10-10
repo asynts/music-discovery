@@ -18,7 +18,7 @@ export function Bookmark(props) {
         if (props.track !== null) {
             fetchTrackBookmarkedAsync(props.track);
         }
-    });
+    }, [props.track, fetchTrackBookmarkedAsync]);
 
     let isDisabled = props.track === null || props.track.bookmarked === null;
 

@@ -29,12 +29,3 @@ I have a feature stop for now!
 ### Code Smells
 
 -   Are `<ArtistProvider />` and `<AuthProvider />` in the correct order?
-
--   Cleanup `<ArtistProvider />`.
-    Look for examples online.
-
-    I am concerned about `useEffect` feedback loops.
-
-    I guess I need to use `useCallback` or `useEvent` here.
-
--   Verify `useEffect` dependencies.
