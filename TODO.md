@@ -21,3 +21,9 @@ I have a feature stop for now!
 -   Handle authentication errors.
 
 -   Systematically enumerate possible failure cases.
+
+### Tweaks
+
+-   Make a screenshot that can be shown on Github without blur or scrolling.
+    Currently, the normal version isn't readable and if you click on it, you need to scroll.
+    It just needs to be much smaller.

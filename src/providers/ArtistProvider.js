@@ -261,9 +261,9 @@ export function ArtistProvider(props) {
 
     let setTrackBookmarkedAsync = useCallback(async track => {
         if (track.bookmarked) {
-            await server.bookmarkTrackAsync(track.id);
-        } else {
             await server.unbookmarkTrackAsync(track.id);
+        } else {
+            await server.bookmarkTrackAsync(track.id);
         }
 
         dispatch({

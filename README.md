@@ -19,7 +19,7 @@ However, I put a stronger focus on functionality:
 
 ### Usage
 
-You can run the application locally with `npm start` or serve the output of `npm build` with a web server.
+You can run the application locally with `npm start` or serve the output of `npm run build` with a web server.
 Alternatively, you can visit [my instance][3].
 
 In order to use the application you need to authenticate at Spotify.
