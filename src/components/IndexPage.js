@@ -26,8 +26,8 @@ function RootArtistForm(props) {
             <div>
                 Please enter a Spotify Artist ID to start searching from.<br />
                 Examples:<br />
-                <pre><code>Linkin Park:        https://open.spotify.com/artist/<b>6XyY86QOPPrYVGvF9ch6wz</b><br />
-                Twenty One Pilotes: https://open.spotify.com/artist/<b>3YQKmKGau1PzlVlkL1iodx</b></code></pre>
+                <pre><code>Linkin Park:       https://open.spotify.com/artist/<b>6XyY86QOPPrYVGvF9ch6wz</b><br />
+Twenty One Pilots: https://open.spotify.com/artist/<b>3YQKmKGau1PzlVlkL1iodx</b></code></pre>
             </div>
             <input placeholder="Spotify Artist ID" value={artistId} onChange={onChange} onKeyDown={onKeyDown} />
         </div>

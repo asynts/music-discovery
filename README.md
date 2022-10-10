@@ -13,7 +13,7 @@ However, I put a stronger focus on functionality:
 
 -   It provides better overview, making it easier to navigate larger trees.
 
--   It is more efficent, making it possible to view larger trees without lag.
+-   It is more efficient, making it possible to view larger trees without lag.
 
 [Gnoostic][2] is another similar site which is less interactive.
 

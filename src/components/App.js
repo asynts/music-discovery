@@ -43,7 +43,6 @@ function AppRoutes(props) {
         {
             path: "/discover/:paramRootArtistId",
             element: (
-                // FIXME: Is this in the correct order?
                 <>
                     <HideRouteFromSearchEngines />
                     <AuthProvider>

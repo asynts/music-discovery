@@ -21,11 +21,3 @@ I have a feature stop for now!
 -   Handle authentication errors.
 
 -   Systematically enumerate possible failure cases.
-
-### Tweaks
-
--   Run a spell checker on the codebase.
-
-### Code Smells
-
--   Are `<ArtistProvider />` and `<AuthProvider />` in the correct order?
