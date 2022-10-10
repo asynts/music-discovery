@@ -22,6 +22,10 @@ I have a feature stop for now!
 
 -   Systematically enumerate possible failure cases.
 
+-   Make the deploy script faster by using parallel uploads.
+
+-   Delete old files when deploying.
+
 ### Tweaks
 
 -   Make a screenshot that can be shown on Github without blur or scrolling.
