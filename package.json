@@ -1,6 +1,6 @@
 {
     "name": "@local/music-discovery",
-    "version": "0.6.1",
+    "version": "0.6.2",
     "private": true,
     "dependencies": {
         "oauth4webapi": "^1.2.0",
