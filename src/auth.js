@@ -1,4 +1,4 @@
-import * as oauth from "@panva/oauth4webapi";
+import * as oauth from "oauth4webapi";
 
 let SPOTIFY_CLIENT_ID = "e65e5a2379654a8782ac21646029ca66";
 let SPOTIFY_SCOPE = "user-library-read user-library-modify";
