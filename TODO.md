@@ -1,33 +1,35 @@
 ### Features
 
-I have a feature stop for now!
-
--   There are several race conditions in the application, resolve that.
-
--   Create a proper design and put some effort in.
-
--   Search for the root artist.
-
--   Group API calls together (e.g. fetch bookmark.)
+-   Group similar requests, in particular loading bookmarked tracks.
+    The Spotify API allows checking multiple tracks at the same time.
 
     I get a `429 Too Many Requests` currently.
 
--   Allow playing song again by clicking on them.
+-   Create a proper design that looks good.
+
+-   There are several race conditions in the application, resolve that.
+
+-   Search for the root artist.
 
 -   Sometimes, Spotify returns `503 Service Unavailable`, deal with that.
 
 -   Play whole songs.
 
--   Handle authentication errors.
+    Currently, we can only play 30 second snippets because otherwise I need to integrate
+    the Spotify SDK to use their DRM thing.
 
--   Systematically enumerate possible failure cases.
+-   Error handling
 
--   Make the deploy script faster by using parallel uploads.
+    -   Systematically enumerate possible failure cases.
 
--   Delete old files when deploying.
+    -   Handle authentication errors.
 
 ### Tweaks
 
--   Make a screenshot that can be shown on Github without blur or scrolling.
-    Currently, the normal version isn't readable and if you click on it, you need to scroll.
-    It just needs to be much smaller.
+-   "Fork me on GitHub" button.
+
+-   Allow playing song again by clicking on them.
+
+-   Create a screenshot that can be shown without being scaled down.
+
+### Bugs
