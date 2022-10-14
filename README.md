@@ -44,4 +44,4 @@ This is in an early state of development:
 
   [1]: https://musicroamer.com/
   [2]: https://www.gnoosic.com/
-  [3]: https://md.asynts.com/
+  [3]: https://md.apps.asynts.com/
